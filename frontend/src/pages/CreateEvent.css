@@ -1,0 +1,478 @@
+/* ==========================================
+   ESTRADE — CREATE EVENT PAGE
+========================================== */
+
+.create-event-page {
+  min-height: 100vh;
+
+  padding: 65px 7% 100px;
+
+  background: #faf8f3;
+
+  color: #302522;
+}
+
+.create-event-container {
+  width: 100%;
+  max-width: 1050px;
+
+  margin: 0 auto;
+}
+
+/* ==========================================
+   BACK TO DASHBOARD
+========================================== */
+
+.create-event-back {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 10px;
+
+  margin-bottom: 65px;
+
+  color: #85766f;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+
+  text-decoration: none;
+
+  transition: color 0.3s ease;
+}
+
+.create-event-back:hover {
+  color: #760719;
+}
+
+/* ==========================================
+   PAGE HEADER
+========================================== */
+
+.create-event-header {
+  margin-bottom: 60px;
+}
+
+.create-event-label {
+  display: block;
+
+  margin-bottom: 25px;
+
+  color: #760719;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+
+  letter-spacing: 3px;
+}
+
+.create-event-header h1 {
+  margin: 0 0 25px;
+
+  color: #760719;
+
+  font-family: "Cormorant Garamond", Georgia, serif;
+
+  font-size: clamp(65px, 7vw, 105px);
+  font-weight: 500;
+
+  line-height: 0.9;
+  letter-spacing: -3px;
+}
+
+.create-event-header h1 em {
+  font-weight: 400;
+}
+
+.create-event-header p {
+  max-width: 550px;
+
+  margin: 0;
+
+  color: #716760;
+
+  font-family: Georgia, serif;
+  font-size: 18px;
+
+  line-height: 1.7;
+}
+
+/* ==========================================
+   FORM LAYOUT
+========================================== */
+
+.create-event-form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 25px;
+}
+
+/* ==========================================
+   FORM SECTION CARDS
+========================================== */
+
+.create-event-section {
+  padding: 38px 42px;
+
+  background: #fffdf9;
+
+  border: 1px solid #e6e0d8;
+  border-radius: 8px;
+
+  box-shadow: 0 5px 25px rgba(70, 35, 35, 0.025);
+
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.create-event-section:hover {
+  border-color: #dbc6bd;
+
+  box-shadow: 0 12px 35px rgba(70, 35, 35, 0.05);
+}
+
+/* SECTION TITLE */
+
+.create-event-section h2 {
+  margin: 0 0 32px;
+  padding-bottom: 20px;
+
+  border-bottom: 1px solid #ece4dc;
+
+  color: #760719;
+
+  font-family: "Cormorant Garamond", Georgia, serif;
+
+  font-size: 30px;
+  font-weight: 600;
+}
+
+/* ==========================================
+   FIELD LAYOUT
+========================================== */
+
+.create-event-field {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+
+  gap: 11px;
+  margin-bottom: 24px;
+}
+
+.create-event-field:last-child {
+  margin-bottom: 0;
+}
+
+.create-event-field label {
+  color: #423834;
+
+  font-family: "DM Sans", sans-serif;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ==========================================
+   INPUTS, TEXTAREA & SELECT
+========================================== */
+
+.create-event-field input,
+.create-event-field textarea,
+.create-event-field select {
+  width: 100%;
+  min-width: 0;
+
+  padding: 16px 18px;
+
+  background: #faf8f3;
+
+  border: 1px solid #e1d8d0;
+  border-radius: 5px;
+
+  outline: none;
+
+  color: #302522;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.create-event-field input {
+  min-height: 54px;
+}
+
+.create-event-field textarea {
+  min-height: 130px;
+
+  resize: vertical;
+
+  line-height: 1.7;
+}
+
+.create-event-field select {
+  min-height: 54px;
+
+  cursor: pointer;
+}
+
+.create-event-field input::placeholder,
+.create-event-field textarea::placeholder {
+  color: #aa9c95;
+}
+
+/* ACTIVE INPUT */
+
+.create-event-field input:focus,
+.create-event-field textarea:focus,
+.create-event-field select:focus {
+  background: #fffdf9;
+
+  border-color: #760719;
+
+  box-shadow: 0 0 0 3px rgba(118, 7, 25, 0.08);
+}
+
+/* ==========================================
+   TWO-COLUMN FIELDS
+========================================== */
+
+.create-event-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 25px;
+}
+
+.create-event-grid .create-event-field {
+  margin-bottom: 0;
+}
+
+/* ==========================================
+   HELPER TEXT
+========================================== */
+
+.create-event-hint {
+  margin: 22px 0 0;
+
+  padding: 14px 18px;
+
+  background: #f8f0eb;
+
+  border-left: 3px solid #b68a7a;
+
+  color: #85766f;
+
+  font-family: "DM Sans", sans-serif;
+
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* ==========================================
+   ACTION BUTTONS
+========================================== */
+
+.create-event-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 18px;
+
+  padding-top: 30px;
+}
+
+.create-event-cancel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 53px;
+
+  padding: 15px 28px;
+
+  background: transparent;
+
+  border: 1px solid #d8ccc4;
+  border-radius: 5px;
+
+  color: #716760;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+
+  text-decoration: none;
+
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.create-event-cancel:hover {
+  background: #f4eee7;
+  border-color: #bda8a0;
+}
+
+/* PRIMARY BUTTON */
+
+.create-event-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  min-height: 53px;
+
+  padding: 15px 30px;
+
+  background: #760719;
+
+  border: 1px solid #760719;
+  border-radius: 5px;
+
+  color: white;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.create-event-submit:hover {
+  background: #570713;
+
+  transform: translateY(-3px);
+
+  box-shadow: 0 10px 25px rgba(118, 7, 25, 0.15);
+}
+
+/* ==========================================
+   FORM MESSAGE
+========================================== */
+
+.create-event-message {
+  padding: 15px 20px;
+
+  background: #f8ece6;
+
+  border: 1px solid #e8d2c6;
+  border-radius: 5px;
+
+  color: #760719;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+}
+
+/* ==========================================
+   JSON PREVIEW
+========================================== */
+
+.create-event-preview {
+  overflow-x: auto;
+
+  padding: 25px;
+
+  background: #32040d;
+
+  border-radius: 8px;
+
+  color: #f5e8de;
+
+  font-family: Consolas, monospace;
+  font-size: 13px;
+
+  line-height: 1.8;
+
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+========================================== */
+
+@media (max-width: 768px) {
+
+  .create-event-page {
+    padding: 40px 6% 75px;
+  }
+
+  .create-event-back {
+    margin-bottom: 45px;
+  }
+
+  .create-event-header {
+    margin-bottom: 45px;
+  }
+
+  .create-event-header h1 {
+    font-size: clamp(55px, 11vw, 75px);
+    letter-spacing: -2px;
+  }
+
+  .create-event-header p {
+    font-size: 16px;
+  }
+
+  .create-event-section {
+    padding: 28px 22px;
+  }
+
+  .create-event-section h2 {
+    font-size: 27px;
+  }
+
+  .create-event-grid {
+    grid-template-columns: 1fr;
+
+    gap: 23px;
+  }
+
+  .create-event-actions {
+    flex-direction: column-reverse;
+
+    align-items: stretch;
+  }
+
+  .create-event-submit,
+  .create-event-cancel {
+    width: 100%;
+  }
+}
+
+/* ==========================================
+   ACCESSIBILITY
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .create-event-section,
+  .create-event-submit,
+  .create-event-cancel {
+    transition: none;
+  }
+
+  .create-event-submit:hover {
+    transform: none;
+  }
+}

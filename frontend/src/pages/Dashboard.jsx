@@ -6,6 +6,7 @@ import DashboardStats from "../components/DashboardStats";
 import WithdrawalAlert from "../components/WithdrawalAlert";
 import UpcomingEvents from "../components/UpcomingEvents";
 import EventReadiness from "../components/EventReadiness";
+import { Link } from "react-router-dom";
 
 import "./Dashboard.css";
 

@@ -48,8 +48,6 @@ const handleLogin = async (e) => {
     setLoading(false);
   }
 };
-
-
   return (
     <div className="estrade-login">
 

@@ -12,14 +12,14 @@ import { apiRequest, authAPI, eventAPI } from "../services/api";
 import "./Dashboard.css";
 import "./Operations.css";
 
-export default function Dashboard() {
+export default function Dashboard({ initialCreateEvent = false }) {
   const navigate = useNavigate();
   const [activePage, setActivePage] = useState("Overview");
   const [searchQuery, setSearchQuery] = useState("");
   const [message, setMessage] = useState("");
   const [notice, setNotice] = useState("");
   const [data, setData] = useState(null);
-  const [creating, setCreating] = useState(false);
+  const [creating, setCreating] = useState(initialCreateEvent);
   const [selected, setSelected] = useState("");
   const [committeeFilter, setCommitteeFilter] = useState("");
   const load = useCallback(async () => {
@@ -83,6 +83,6 @@ export default function Dashboard() {
         </>}
       </main>
     </div>
-    {creating && data && <EventForm committees={data.committees} venues={data.venues} user={data.user} onClose={notice => {setCreating(false); if (notice) setNotice(notice);}} onCreated={event => {setNotice(`Event “${event.title}” created successfully.`);setCreating(false);setCommitteeFilter(event.committee_id);setSelected(event.id);setActivePage("Events");load().catch(e => setMessage(`Event saved, but the dashboard could not refresh: ${e.message}`));}} />}
+    {creating && data && <EventForm committees={data.committees} venues={data.venues} user={data.user} onClose={notice => {setCreating(false); if (notice) setNotice(notice); if (initialCreateEvent) navigate("/dashboard", {replace:true});}} onCreated={event => {if (initialCreateEvent) navigate("/dashboard", {replace:true}); setNotice(`Event “${event.title}” created successfully.`);setCreating(false);setCommitteeFilter(event.committee_id);setSelected(event.id);setActivePage("Events");load().catch(e => setMessage(`Event saved, but the dashboard could not refresh: ${e.message}`));}} />}
   </div>;
 }

@@ -1,9 +1,4 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route
-} from "react-router-dom";
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
@@ -14,19 +9,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-
-        {/* LANDING PAGE */}
         <Route path="/" element={<Home />} />
-
-        {/* FACULTY DASHBOARD */}
-        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-
-        {/* LOGIN PAGE */}
         <Route path="/login" element={<Login />} />
-
-        {/* SIGNUP PAGE */}
         <Route path="/signup" element={<Signup />} />
-
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        {/* Reuse the real authenticated event form, rather than the old preview-only page. */}
+        <Route path="/create-event" element={<ProtectedRoute><Dashboard initialCreateEvent /></ProtectedRoute>} />
         <Route path="*" element={<Home />} />
       </Routes>
     </BrowserRouter>

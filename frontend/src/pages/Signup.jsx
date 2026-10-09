@@ -1,5 +1,6 @@
+import { authAPI } from "../services/api";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   UserRound,
@@ -24,7 +25,9 @@ function Signup() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
@@ -38,22 +41,37 @@ function Signup() {
     setMessage("");
   };
 
-  const handleSignup = (e) => {
-    e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      setMessage("Passwords do not match.");
-      return;
-    }
+const handleSignup = async (e) => {
+  e.preventDefault();
 
-    if (formData.password.length < 8) {
-      setMessage("Password must contain at least 8 characters.");
-      return;
-    }
+  if (formData.password !== formData.confirmPassword) {
+    setMessage("Passwords do not match.");
+    return;
+  }
 
-    // Connect to FastAPI authentication API later.
-    setMessage("Signup API is not connected yet.");
-  };
+  if (formData.password.length < 8) {
+    setMessage("Password must contain at least 8 characters.");
+    return;
+  }
+
+  setMessage("Creating your account...");
+
+  setLoading(true);
+  try {
+    await authAPI.register({
+      full_name: formData.name,
+      email: formData.email,
+      password: formData.password,
+    });
+
+    navigate("/login", {state: {message: "Account created. Sign in to open your workspace."}});
+  } catch (error) {
+    setMessage(error.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="estrade-login">
@@ -267,7 +285,7 @@ function Signup() {
 
             {/* CREATE ACCOUNT */}
 
-            <button type="submit" className="login-submit">
+            <button type="submit" disabled={loading} className="login-submit">
               Create Account
               <ArrowRight size={19} />
             </button>

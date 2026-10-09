@@ -3,6 +3,7 @@
 @import "tailwindcss";
 
 :root {
+  --font-body: "Times New Roman", Times, "Liberation Serif", serif;
   --primary: #760719;
   --primary-dark: #570713;
   --background: #faf8f3;
@@ -21,15 +22,19 @@ body {
   min-width: 320px;
   background: var(--background);
   color: var(--text);
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-body);
 }
 
 h1,
 h2,
 h3 {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-body);
 }
 
 button {
   cursor: pointer;
+}
+/* Controls and tables use the application typeface; wordmarks retain their own family. */
+html, button, input, select, textarea, table {
+  font-family: var(--font-body);
 }

@@ -1,14 +1,25 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
+import { authAPI } from "../services/api";
 
-function ProtectedRoute() {
-  const isLoggedIn =
-    sessionStorage.getItem("estrade_demo_login") === "true";
+export default function ProtectedRoute({ children }) {
+  const [state, setState] = useState("loading");
 
-  if (!isLoggedIn) {
-    return <Navigate to="/login" replace />;
-  }
+  useEffect(() => {
+    let active = true;
+    const unauthorized = () => { if (active) setState("denied"); };
+    window.addEventListener("estrade:unauthorized", unauthorized);
+    authAPI.me()
+      .then(() => { if (active) setState("ready"); })
+      .catch(() => { if (active) setState("denied"); });
+    return () => {
+      active = false;
+      window.removeEventListener("estrade:unauthorized", unauthorized);
+    };
+  }, []);
 
-  return <Outlet />;
+  if (state === "loading") return <p role="status">Opening your workspace…</p>;
+  return state === "ready" ? children : (
+    <Navigate to="/login" replace state={{ message: "Please sign in to continue. Your session may have expired." }} />
+  );
 }
-
-export default ProtectedRoute;

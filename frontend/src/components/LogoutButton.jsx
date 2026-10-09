@@ -1,12 +1,13 @@
 import { LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { authAPI } from "../services/api";
 
 function LogoutButton() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Remove temporary demo login session
-    sessionStorage.removeItem("estrade_demo_login");
+    // Clear the real in-memory JWT used by authenticated API calls.
+    authAPI.setToken(null);
 
     // Redirect to Login page
     navigate("/login", { replace: true });

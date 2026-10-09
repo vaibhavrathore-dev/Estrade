@@ -1,5 +1,7 @@
 import { useState } from "react";
 import LoginEcosystem from "../components/LoginEcosystem";
+import { useNavigate, useLocation } from "react-router-dom";
+import { authAPI } from "../services/api";
 
 import {
   Eye,
@@ -7,39 +9,44 @@ import {
   ArrowRight,
   ArrowLeft,
   Mail,
-  LockKeyhole,
-  CalendarDays,
-  UsersRound,
-  ScanSearch,
-  Award
+  LockKeyhole
 } from "lucide-react";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import "./Login.css";
 
 function Login() {
-  
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [message, setMessage] = useState("");
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(location.state?.message || "");
 
-const handleLogin = (e) => {
+
+const handleLogin = async (e) => {
   e.preventDefault();
 
-  // TEMPORARY DEMO LOGIN ONLY
-  // Replace this with FastAPI authentication later.
+  setMessage("Signing in...");
 
-  if (!email.trim() || !password.trim()) {
-    setMessage("Please enter your email and password.");
-    return;
+  setLoading(true);
+  try {
+    const result = await authAPI.login({
+      email,
+      password,
+    });
+
+    authAPI.setToken(result.access_token);
+
+    navigate("/dashboard");
+  } catch (error) {
+    setMessage(error.message);
+  } finally {
+    setLoading(false);
   }
-
-  sessionStorage.setItem("estrade_demo_login", "true");
-
-  navigate("/dashboard", { replace: true });
 };
   return (
     <div className="estrade-login">
@@ -166,7 +173,7 @@ const handleLogin = (e) => {
                   Password
                 </label>
 
-                <Link to="/forgot-password">
+                <Link to="/forgot-password" onClick={e => {e.preventDefault(); setMessage("Password reset is not available yet. Contact your event administrator.");}}>
                   Forgot Password?
                 </Link>
 
@@ -207,7 +214,7 @@ const handleLogin = (e) => {
 
             {/* SIGN IN BUTTON */}
 
-            <button type="submit" className="login-submit">
+            <button type="submit" disabled={loading} className="login-submit">
               Sign In
               <ArrowRight size={19} />
             </button>

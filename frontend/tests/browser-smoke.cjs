@@ -1,0 +1,65 @@
+// Run against backend/tests/browser_server.py only; all database writes roll back.
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const fs=require('fs');
+(async()=>{
+ const fixture=JSON.parse(fs.readFileSync('/tmp/estrade-browser-fixture.json'));
+ const browser=await chromium.launch({headless:true});
+ const page=await browser.newPage({viewport:{width:1440,height:1000}});
+ if (process.env.TEST_API_ORIGIN) await page.route('**/api/**', async route => {
+   const response = await route.fetch({url: route.request().url().replace(/^http:\/\/[^/]+/, process.env.TEST_API_ORIGIN)});
+   await route.fulfill({response});
+ });
+ const errors=[]; page.on('pageerror',e=>errors.push(e.message));
+ const base='http://127.0.0.1:5173';
+ await page.goto(base+'/dashboard'); await page.waitForURL('**/login');
+ await page.goto(base+'/signup');
+ await page.getByLabel('Full Name').fill('Browser Participant');
+ const email=`browser-${Date.now()}@example.org`;
+ await page.getByLabel('Email Address').fill(email);
+ await page.getByLabel('Password',{exact:true}).fill('browser-test-123');
+ await page.getByLabel('Confirm Password',{exact:true}).fill('browser-test-123');
+ await page.getByRole('button',{name:'Create Account',exact:true}).click();
+ await page.waitForURL('**/login');
+ await page.getByLabel('Email Address').fill(email); await page.getByLabel('Password',{exact:true}).fill('wrong');
+ await page.getByRole('button',{name:'Sign In',exact:true}).click(); await page.getByText('Invalid email or password',{exact:true}).waitFor();
+ await page.getByLabel('Email Address').fill(fixture.admin); await page.getByLabel('Password',{exact:true}).fill('test-password-123');
+ await page.getByRole('button',{name:'Sign In',exact:true}).click(); await page.waitForURL('**/dashboard'); console.log('Auth passed');
+ await page.getByRole('heading',{name:'Welcome back, Test Organizer.'}).waitFor();
+ async function fillEvent(title,venue,start='2026-11-20T10:00',end='2026-11-20T12:00') {
+  await page.getByRole('button',{name:'Create Event',exact:true}).click();
+  const dialog=page.getByRole('dialog');
+  await dialog.getByLabel('Event name').fill(title); await dialog.locator('select[name=committee_id]').selectOption({label:fixture.committee});
+  await dialog.locator('select[name=venue_id]').selectOption({label:venue+' · capacity 100'});
+  await dialog.getByLabel('Starts (your local time)').fill(start); await dialog.getByLabel('Ends (your local time)').fill(end);
+  await dialog.getByLabel('Participant capacity').fill('50'); await dialog.locator('select[name=status]').selectOption('confirmed');
+  await dialog.getByRole('button',{name:'Create Event',exact:true}).click();
+ }
+ await fillEvent('Browser Event A',fixture.venue); console.log('Event A submitted');
+ await page.getByRole('heading',{name:'Browser Event A',exact:true,level:2}).waitFor();
+ await fillEvent('Browser Event B',fixture.venue);
+ await page.getByRole('alert').filter({hasText:'Venue is already booked'}).waitFor();
+ const dialog=page.getByRole('dialog'); await dialog.locator('select[name=venue_id]').selectOption({label:fixture.other+' · capacity 100'});
+ await dialog.getByRole('button',{name:'Create Event',exact:true}).click();
+ await page.getByRole('heading',{name:'Browser Event B',exact:true,level:2}).waitFor();
+ console.log('Conflict and recovery passed'); await page.getByRole('button',{name:'Media',exact:true}).click();
+ await page.getByLabel('Event images (up to 12)').setInputFiles([require('path').resolve(__dirname, '../../ai/input/photo2.jpg'),require('path').resolve(__dirname, '../../ai/input/photo2.jpg')]);
+ await page.getByRole('button',{name:'Analyze images',exact:true}).click(); await page.getByText(/Accepted: .*Review: .*Rejected:/).waitFor();
+ await page.screenshot({path:'/tmp/estrade-media-browser.png',fullPage:true});
+ await page.getByRole('button',{name:'Events',exact:true}).click();
+ await fillEvent('Browser Completed Event',fixture.venue,'2026-10-01T10:00','2026-10-01T12:00');
+ await page.getByRole('heading',{name:'Browser Completed Event',exact:true,level:2}).waitFor();
+ await page.getByLabel('Participant account email').fill(email); await page.getByLabel('Verification evidence').fill('Browser test attendance confirmed');
+ await page.getByRole('button',{name:'Confirm participation',exact:true}).click();
+ await page.getByRole('button',{name:'Issue certificate',exact:true}).click();
+ const downloaded=page.waitForEvent('download'); await page.getByRole('button',{name:'Download certificate',exact:true}).click();
+ const download=await downloaded; await download.saveAs('/tmp/estrade-browser-certificate.pdf');
+ await page.getByRole('button',{name:'Coordinators',exact:true}).click();
+ await page.locator('select[name=user_id]').selectOption({label:'Test Student · coordinator'}); await page.getByLabel('Duty',{exact:true}).fill('Registration desk');
+ await page.getByRole('button',{name:'Assign',exact:true}).click(); await page.getByText('Registration desk',{exact:false}).first().waitFor();
+ await page.getByRole('button',{name:'Overview',exact:true}).click(); await page.screenshot({path:'/tmp/estrade-dashboard-browser.png',fullPage:true});
+ await page.setViewportSize({width:390,height:844}); await page.screenshot({path:'/tmp/estrade-mobile-browser.png',fullPage:true});
+ await page.reload(); await page.waitForURL('**/login');
+ if(errors.length) throw new Error(errors.join('\n'));
+ console.log('PASS browser: protected route, signup, invalid login, real login, create A, conflict 409, venue B recovery, AI upload, verified participation, PDF download, assignment, navigation, reload logout; zero runtime errors.');
+ await browser.close();
+})().catch(e=>{console.error(e.message);process.exit(1)});

@@ -14,7 +14,7 @@
   background: var(--cream);
   color: #252020;
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
 }
 
 /* ======================================
@@ -95,7 +95,7 @@
 
   color: #252020;
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
   font-size: 14px;
 
   text-align: left;
@@ -150,13 +150,15 @@
 }
 
 .estrade-dashboard .dashboard-content {
-  padding: 35px 30px;
+  padding: 16px 26px;
 }
 
 .estrade-dashboard .dashboard-content h1 {
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-body);
 
-  font-size: 48px;
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.1;
 
   color: var(--wine);
 
@@ -300,7 +302,7 @@
 
   color: #252020;
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 14px;
 
@@ -413,7 +415,7 @@
 
 .estrade-dashboard .notification-panel h3 {
 
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 26px;
 
@@ -426,7 +428,7 @@
 
 .estrade-dashboard .notification-panel p {
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 13px;
 
@@ -455,7 +457,7 @@
 
   gap: 10px;
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 14px;
 
@@ -513,7 +515,7 @@
 
   border-radius: 4px;
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 14px;
 
@@ -647,7 +649,7 @@
 
 .estrade-dashboard .stat-item h2 {
 
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 43px;
 
@@ -666,7 +668,7 @@
 
 .estrade-dashboard .stat-item p {
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 16px;
 
@@ -750,7 +752,7 @@
 }
 
 .estrade-dashboard .section-title-row h2 {
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 32px;
   font-weight: 600;
@@ -775,7 +777,7 @@
 
   color: #760719;
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
   font-size: 13px;
 
   cursor: pointer;
@@ -846,7 +848,7 @@
 
 
 .estrade-dashboard .event-date-box strong {
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 24px;
   font-weight: 600;
@@ -856,7 +858,7 @@
 
 
 .estrade-dashboard .event-date-box span {
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
   font-size: 11px;
 }
 
@@ -872,7 +874,7 @@
 
 
 .estrade-dashboard .event-information h4 {
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 15px;
   font-weight: 500;
@@ -884,7 +886,7 @@
 
 
 .estrade-dashboard .event-information p {
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 12px;
 
@@ -901,7 +903,7 @@
 .estrade-dashboard .event-coordinators {
   min-width: 115px;
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
   font-size: 12px;
 
   color: #55504c;
@@ -919,7 +921,7 @@
 
   min-width: 135px;
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
   font-size: 12px;
 
   color: #45403d;
@@ -969,7 +971,7 @@
 
   color: #760719;
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
   font-size: 12px;
 
   white-space: nowrap;
@@ -990,7 +992,7 @@
 
   color: #77716d;
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
   font-size: 14px;
 }
 
@@ -1071,7 +1073,7 @@
 /* Alert Heading */
 
 .estrade-dashboard .withdrawal-content h3 {
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-body);
   font-size: 26px;
   font-weight: 600;
 
@@ -1082,7 +1084,7 @@
 /* Alert Description */
 
 .estrade-dashboard .withdrawal-content p {
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
   font-size: 14px;
   line-height: 1.5;
 
@@ -1097,7 +1099,7 @@
   flex-wrap: wrap;
   gap: 9px;
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
   font-size: 12px;
   color: #77716d;
 }
@@ -1118,7 +1120,7 @@
   border: none;
   border-radius: 4px;
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
   font-size: 14px;
 
   white-space: nowrap;
@@ -1192,7 +1194,7 @@
 
 .estrade-dashboard .event-readiness h2 {
 
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 32px;
 
@@ -1210,7 +1212,7 @@
 
 .estrade-dashboard .event-readiness h4 {
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 16px;
 
@@ -1240,7 +1242,7 @@
 
 .estrade-dashboard .readiness-score strong {
 
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 52px;
 
@@ -1254,7 +1256,7 @@
 
 .estrade-dashboard .readiness-score span {
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 12px;
 
@@ -1296,7 +1298,7 @@
 
 .estrade-dashboard .dashboard-content .progress-caption {
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 13px;
 
@@ -1312,7 +1314,7 @@
 
 .estrade-dashboard .event-readiness h5 {
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 15px;
 
@@ -1352,7 +1354,7 @@
 
   background: transparent;
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 13px;
 
@@ -1432,7 +1434,7 @@
 
   color: #760719;
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 13px;
 

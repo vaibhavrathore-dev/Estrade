@@ -14,24 +14,33 @@ import {
   Award
 } from "lucide-react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import "./Login.css";
 
 function Login() {
-
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+const handleLogin = (e) => {
+  e.preventDefault();
 
-    // Backend authentication will be connected later.
-    setMessage("Login authentication is not connected yet.");
-  };
+  // TEMPORARY DEMO LOGIN ONLY
+  // Replace this with FastAPI authentication later.
 
+  if (!email.trim() || !password.trim()) {
+    setMessage("Please enter your email and password.");
+    return;
+  }
+
+  sessionStorage.setItem("estrade_demo_login", "true");
+
+  navigate("/dashboard", { replace: true });
+};
   return (
     <div className="estrade-login">
 

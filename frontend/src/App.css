@@ -1,0 +1,259 @@
+/* ============================= */
+/* ESTRADE DESIGN SYSTEM         */
+/* ============================= */
+
+:root {
+  --burgundy: #760719;
+  --burgundy-dark: #570713;
+  --cream: #faf8f3;
+  --text-dark: #252020;
+  --text-muted: #77716d;
+  --border-color: #e6e0d8;
+}
+
+/* GENERAL */
+
+.estrade-app {
+  min-height: 100vh;
+  background: var(--cream);
+}
+
+/* ============================= */
+/* NAVIGATION                    */
+/* ============================= */
+
+.navbar {
+  height: 68px;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 5.5%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* LOGO */
+
+.logo {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 43px;
+  font-weight: 500;
+  letter-spacing: -2.5px;
+  line-height: 1;
+
+  color: var(--burgundy);
+  text-decoration: none;
+}
+
+/* NAVIGATION LINKS */
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 46px;
+}
+
+.nav-links a {
+  font-family: Georgia, serif;
+  font-size: 14px;
+
+  color: var(--text-dark);
+  text-decoration: none;
+
+  padding: 8px 0;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: var(--burgundy);
+}
+
+.nav-links .active {
+  color: var(--burgundy);
+  border-bottom: 1px solid var(--burgundy);
+}
+
+/* RIGHT NAVIGATION */
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 38px;
+}
+
+.login-link {
+  font-family: Georgia, serif;
+  font-size: 14px;
+  text-decoration: none;
+  color: var(--text-dark);
+}
+
+.nav-button {
+  background: var(--burgundy);
+  color: white;
+
+  padding: 12px 30px;
+  border-radius: 4px;
+
+  font-family: Georgia, serif;
+  font-size: 14px;
+  text-decoration: none;
+
+  transition: background 0.2s ease;
+}
+
+.nav-button:hover {
+  background: var(--burgundy-dark);
+}
+
+/* ============================= */
+/* HERO SECTION                  */
+/* ============================= */
+
+.hero {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 42px 5.5% 55px;
+
+  display: flex;
+  align-items: center;
+
+  min-height: 405px;
+}
+
+.hero-content {
+  max-width: 560px;
+}
+
+/* SUBTITLE */
+
+.hero-subtitle {
+  font-family: Georgia, serif;
+  font-size: 16px;
+  color: var(--text-muted);
+  margin-bottom: 15px;
+}
+
+/* MAIN HEADING */
+
+.hero h1 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+
+  font-size: clamp(64px, 6.5vw, 96px);
+  font-weight: 500;
+  letter-spacing: -3px;
+  line-height: 0.88;
+
+  color: var(--burgundy);
+
+  margin: 0 0 25px;
+}
+
+/* DESCRIPTION */
+
+.hero-description {
+  font-family: Georgia, serif;
+  font-size: 20px;
+  line-height: 1.35;
+
+  color: var(--text-dark);
+  max-width: 480px;
+
+  margin-bottom: 25px;
+}
+
+/* HERO BUTTONS */
+
+.hero-buttons {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+
+.primary-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+
+  background: var(--burgundy);
+  color: white;
+
+  padding: 15px 35px;
+
+  border-radius: 4px;
+
+  font-family: Georgia, serif;
+  font-size: 17px;
+  text-decoration: none;
+
+  transition: background 0.2s ease;
+}
+
+.primary-button:hover {
+  background: var(--burgundy-dark);
+}
+
+.secondary-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+
+  color: var(--burgundy);
+
+  font-family: Georgia, serif;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.secondary-button:hover {
+  text-decoration: underline;
+}
+
+/* ============================= */
+/* RESPONSIVE DESIGN             */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+  .navbar {
+    padding: 0 20px;
+  }
+
+  .logo {
+    font-size: 35px;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .nav-actions {
+    gap: 15px;
+  }
+
+  .nav-button {
+    padding: 10px 15px;
+  }
+
+  .hero {
+    padding: 65px 25px;
+  }
+
+  .hero h1 {
+    font-size: clamp(58px, 11vw, 80px);
+  }
+
+  .hero-description {
+    font-size: 17px;
+  }
+
+  .hero-buttons {
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+}

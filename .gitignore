@@ -1,0 +1,28 @@
+
+# Python virtual environments
+venv/
+.venv/
+env/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environment variables and secrets
+.env
+.env.*
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Test and temporary files
+.pytest_cache/
+.mypy_cache/
+*.log
+
+# Generated AI output
+ai/output/

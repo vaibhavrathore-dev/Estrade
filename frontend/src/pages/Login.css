@@ -1,0 +1,1360 @@
+/* ==========================================
+   ESTRADE — PREMIUM LOGIN PAGE
+========================================== */
+
+.estrade-login {
+  display: grid;
+  grid-template-columns: 48% 52%;
+
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  background: #faf8f3;
+}
+
+/* ==========================================
+   LEFT SIDE — BRAND PANEL
+========================================== */
+
+.login-brand-panel {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  min-height: 100vh;
+  padding: 50px 9%;
+
+  background: linear-gradient(
+    145deg,
+    #450510 0%,
+    #760719 55%,
+    #4b0713 100%
+  );
+
+  color: #faf8f3;
+
+  overflow: hidden;
+}
+
+/* GOLDEN SPOTLIGHT */
+
+.login-brand-panel::before {
+  content: "";
+
+  position: absolute;
+
+  width: 650px;
+  height: 650px;
+
+  top: 15%;
+  right: -250px;
+
+  background: radial-gradient(
+    circle,
+    rgba(235, 181, 105, 0.22) 0%,
+    rgba(235, 181, 105, 0.07) 40%,
+    transparent 70%
+  );
+
+  filter: blur(35px);
+
+  pointer-events: none;
+}
+
+/* SUBTLE DECORATIVE CIRCLE */
+
+.login-brand-panel::after {
+  content: "";
+
+  position: absolute;
+
+  width: 500px;
+  height: 500px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+
+  right: -250px;
+  bottom: -220px;
+
+  pointer-events: none;
+}
+
+/* BRAND LOGO */
+
+.login-brand-logo {
+  position: relative;
+  z-index: 2;
+
+  font-family: "Cormorant Garamond", Georgia, serif;
+
+  font-size: 58px;
+  font-weight: 500;
+
+  letter-spacing: -2px;
+  line-height: 1;
+
+  color: #faf8f3;
+
+  text-decoration: none;
+}
+
+.login-brand-logo span {
+  color: #e6b970;
+}
+
+/* ==========================================
+   BRAND CONTENT
+========================================== */
+
+.login-brand-content {
+  position: relative;
+  z-index: 2;
+
+  max-width: 600px;
+
+  margin: 60px 0;
+}
+
+.login-brand-label {
+  display: block;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 11px;
+
+  letter-spacing: 3px;
+
+  color: #e6b970;
+
+  margin-bottom: 35px;
+}
+
+/* LARGE BRAND HEADING */
+
+.login-brand-content h1 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+
+  font-size: clamp(65px, 6vw, 110px);
+  font-weight: 500;
+
+  line-height: 0.95;
+  letter-spacing: -3px;
+
+  color: #fffdf9;
+
+  margin: 0 0 30px;
+}
+
+.login-brand-content h1 em {
+  font-weight: 400;
+  color: #f3d9c8;
+}
+
+/* DESCRIPTION */
+
+.login-brand-content p {
+  font-family: Georgia, serif;
+
+  font-size: 19px;
+  line-height: 1.8;
+
+  color: #e5d4cf;
+
+  max-width: 420px;
+
+  margin: 0;
+}
+
+/* DECORATIVE LINE */
+
+.login-brand-line {
+  width: 70px;
+  height: 1px;
+
+  background: #e6b970;
+
+  margin: 45px 0 25px;
+}
+
+.login-brand-tagline {
+  font-family: "DM Sans", sans-serif;
+  font-size: 11px;
+
+  letter-spacing: 3px;
+
+  color: #e6b970;
+}
+
+/* BRAND FOOTER */
+
+.login-brand-footer {
+  position: relative;
+  z-index: 2;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 12px;
+
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ==========================================
+   RIGHT SIDE — FORM PANEL
+========================================== */
+
+.login-form-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  min-width: 0;
+  padding: 50px 10% 30px;
+
+  background: #faf8f3;
+}
+
+/* FORM WRAPPER */
+
+.login-form-wrapper {
+  width: 100%;
+  max-width: 430px;
+
+  margin: auto;
+  padding: 50px 0;
+}
+
+/* BACK TO HOME */
+
+.login-back-link {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 10px;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+
+  color: #85766f;
+
+  text-decoration: none;
+
+  margin-bottom: 55px;
+
+  transition: color 0.3s ease;
+}
+
+.login-back-link:hover {
+  color: #760719;
+}
+
+/* ==========================================
+   LOGIN HEADING
+========================================== */
+
+.login-small-label {
+  display: block;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 11px;
+
+  letter-spacing: 3px;
+
+  color: #760719;
+
+  margin-bottom: 22px;
+}
+
+.login-heading h2 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+
+  font-size: clamp(65px, 6vw, 95px);
+  font-weight: 500;
+
+  line-height: 0.85;
+  letter-spacing: -3px;
+
+  color: #760719;
+
+  margin: 0 0 28px;
+}
+
+.login-heading h2 em {
+  font-weight: 400;
+}
+
+.login-heading > p {
+  font-family: Georgia, serif;
+
+  font-size: 16px;
+  line-height: 1.7;
+
+  color: #77716d;
+
+  margin: 0 0 38px;
+}
+
+/* ==========================================
+   LOGIN FORM
+========================================== */
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 25px;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+/* INPUT LABEL */
+
+.login-field label {
+  font-family: "DM Sans", sans-serif;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  color: #423834;
+}
+
+/* INPUT CONTAINER */
+
+.login-input-wrapper {
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  min-height: 56px;
+  padding: 0 17px;
+
+  background: #fffdf9;
+
+  border: 1px solid #e1d8d0;
+  border-radius: 5px;
+
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.login-input-wrapper:focus-within {
+  border-color: #760719;
+
+  box-shadow: 0 0 0 3px rgba(118, 7, 25, 0.08);
+}
+
+/* INPUT ICON */
+
+.login-input-wrapper > svg {
+  color: #9d8d86;
+  flex-shrink: 0;
+}
+
+/* INPUT */
+
+.login-input-wrapper input {
+  flex: 1;
+  min-width: 0;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+
+  color: #302522;
+}
+
+.login-input-wrapper input::placeholder {
+  color: #aa9c95;
+}
+
+/* ==========================================
+   PASSWORD FIELD
+========================================== */
+
+.login-password-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 12px;
+}
+
+.login-password-header a {
+  font-family: "DM Sans", sans-serif;
+  font-size: 12px;
+
+  color: #760719;
+
+  text-decoration: none;
+}
+
+.login-password-header a:hover {
+  text-decoration: underline;
+}
+
+/* SHOW / HIDE BUTTON */
+
+.login-eye-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 4px;
+
+  background: transparent;
+  border: none;
+
+  color: #85766f;
+
+  cursor: pointer;
+}
+
+.login-eye-button:hover {
+  color: #760719;
+}
+
+/* ==========================================
+   SIGN IN BUTTON
+========================================== */
+
+.login-submit {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+
+  padding: 18px 23px;
+  margin-top: 10px;
+
+  background: #760719;
+  color: #fffdf9;
+
+  border: none;
+  border-radius: 5px;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.login-submit:hover {
+  background: #570713;
+
+  transform: translateY(-3px);
+
+  box-shadow: 0 12px 25px rgba(118, 7, 25, 0.17);
+}
+
+/* ==========================================
+   LOGIN STATUS MESSAGE
+========================================== */
+
+.login-message {
+  padding: 12px 15px;
+
+  background: #f8ece6;
+
+  border-left: 3px solid #760719;
+
+  color: #760719;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+}
+
+/* ==========================================
+   CREATE ACCOUNT
+========================================== */
+
+.login-signup {
+  margin-top: 35px;
+
+  padding-top: 25px;
+
+  border-top: 1px solid #e6e0d8;
+
+  text-align: center;
+}
+
+.login-signup p {
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+
+  color: #77716d;
+}
+
+.login-signup a {
+  color: #760719;
+  font-weight: 600;
+
+  text-decoration: none;
+}
+
+.login-signup a:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================
+   RIGHT PANEL FOOTER
+========================================== */
+
+.login-form-footer {
+  font-family: Georgia, serif;
+
+  font-size: 13px;
+  font-style: italic;
+
+  color: #9b8c85;
+
+  text-align: center;
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN — TABLET
+========================================== */
+
+@media (max-width: 1000px) {
+  .estrade-login {
+    grid-template-columns: 42% 58%;
+  }
+
+  .login-brand-panel {
+    padding: 40px 7%;
+  }
+
+  .login-brand-content h1 {
+    font-size: 65px;
+  }
+
+  .login-form-panel {
+    padding: 40px 8% 25px;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN — MOBILE
+========================================== */
+
+@media (max-width: 768px) {
+  .estrade-login {
+    grid-template-columns: 1fr;
+  }
+
+  .login-brand-panel {
+    min-height: auto;
+
+    padding: 25px 6%;
+
+    gap: 15px;
+  }
+
+  .login-brand-logo {
+    font-size: 42px;
+  }
+
+  .login-brand-content {
+    margin: 10px 0;
+  }
+
+  .login-brand-label,
+  .login-brand-content p,
+  .login-brand-line,
+  .login-brand-tagline,
+  .login-brand-footer {
+    display: none;
+  }
+
+  .login-brand-content h1 {
+    font-size: 35px;
+
+    letter-spacing: -1px;
+
+    margin: 0;
+  }
+
+  .login-brand-content h1 br {
+    display: none;
+  }
+
+  .login-form-panel {
+    padding: 30px 7%;
+  }
+
+  .login-form-wrapper {
+    padding: 15px 0 35px;
+  }
+
+  .login-back-link {
+    margin-bottom: 40px;
+  }
+
+  .login-heading h2 {
+    font-size: 75px;
+  }
+
+  .login-form-footer {
+    padding-bottom: 15px;
+  }
+}
+
+/* ==========================================
+   ACCESSIBILITY
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .login-submit,
+  .login-back-link,
+  .login-input-wrapper {
+    transition: none;
+  }
+
+  .login-submit:hover {
+    transform: none;
+  }
+}
+/* =====================================
+   ESTRADE — PRODUCT SHOWCASE LOGIN
+===================================== */
+
+/* LEFT PANEL REFINEMENT */
+
+.estrade-login .login-brand-panel {
+  padding: 32px 7%;
+  gap: 25px;
+}
+
+.estrade-login .login-brand-logo {
+  font-size: 46px;
+}
+
+/* SHOWCASE CONTAINER */
+
+.login-showcase-content {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: 650px;
+
+  margin: auto 0;
+}
+
+/* SMALL LABEL */
+
+.login-showcase-label {
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 10px;
+
+  letter-spacing: 2.4px;
+
+  color: #e6b970;
+
+  margin-bottom: 22px;
+}
+
+/* ANIMATED GOLD DOT */
+
+.login-live-dot {
+  width: 7px;
+  height: 7px;
+
+  background: #e6b970;
+  border-radius: 50%;
+
+  box-shadow: 0 0 12px #e6b970;
+
+  animation: estradePulse 2.5s infinite;
+}
+
+/* MAIN HEADING */
+
+.login-showcase-content h1 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+
+  font-size: clamp(48px, 4.4vw, 78px);
+  font-weight: 500;
+
+  line-height: 0.95;
+  letter-spacing: -2px;
+
+  color: #fffdf9;
+
+  margin: 0 0 18px;
+}
+
+.login-showcase-content h1 em {
+  color: #f3d9c8;
+  font-weight: 400;
+}
+
+/* DESCRIPTION */
+
+.login-showcase-description {
+  font-family: Georgia, serif;
+
+  font-size: 16px;
+  line-height: 1.6;
+
+  color: #e8d9d1;
+
+  margin-bottom: 27px;
+}
+
+/* =====================================
+   DASHBOARD PREVIEW
+===================================== */
+
+.login-dashboard-preview {
+  width: 100%;
+
+  background: #faf8f3;
+
+  padding: 7px;
+
+  border-radius: 9px;
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+
+  box-shadow:
+    0 20px 55px rgba(0, 0, 0, 0.22),
+    0 0 30px rgba(230, 185, 112, 0.08);
+
+  overflow: hidden;
+
+  animation: estradeFloat 6s ease-in-out infinite;
+}
+
+/* BROWSER-STYLE HEADER */
+
+.login-preview-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 7px 10px 12px;
+
+  background: #faf8f3;
+
+  color: #85766f;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.login-preview-dots {
+  display: flex;
+  gap: 5px;
+}
+
+.login-preview-dots span {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #d8c8bf;
+}
+
+.login-preview-dots span:first-child {
+  background: #bc7881;
+}
+
+.login-dashboard-image {
+  width: 100%;
+  height: auto;
+
+  display: block;
+
+  border-radius: 4px;
+}
+
+/* =====================================
+   FEATURE GRID
+===================================== */
+
+.login-core-features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 11px;
+
+  margin-top: 25px;
+}
+
+.login-core-feature {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 12px;
+
+  background: rgba(255, 255, 255, 0.065);
+
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 5px;
+
+  color: #f4e8e2;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 12px;
+
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.login-core-feature svg {
+  color: #e6b970;
+  flex-shrink: 0;
+}
+
+.login-core-feature:hover {
+  transform: translateY(-4px);
+
+  background: rgba(255, 255, 255, 0.12);
+
+  border-color: rgba(230, 185, 112, 0.5);
+}
+
+/* BRAND FOOTER */
+
+.estrade-login .login-brand-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 15px;
+
+  font-size: 11px;
+}
+
+/* =====================================
+   ANIMATIONS
+===================================== */
+
+@keyframes estradeFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+@keyframes estradePulse {
+  0%, 100% {
+    opacity: 0.55;
+    box-shadow: 0 0 5px #e6b970;
+  }
+
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 17px #e6b970;
+  }
+}
+
+/* =====================================
+   TABLET
+===================================== */
+
+@media (max-width: 1000px) {
+  .login-showcase-content h1 {
+    font-size: clamp(42px, 5vw, 62px);
+  }
+
+  .login-core-features {
+    grid-template-columns: 1fr;
+  }
+
+  .login-core-feature {
+    padding: 9px;
+  }
+}
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width: 768px) {
+  .estrade-login .login-brand-panel {
+    padding: 28px 6%;
+  }
+
+  .login-showcase-content {
+    margin: 15px 0;
+  }
+
+  .login-showcase-content h1 {
+    font-size: 42px;
+  }
+
+  .login-showcase-description {
+    font-size: 14px;
+  }
+
+  .login-dashboard-preview {
+    display: none;
+  }
+
+  .login-core-features {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .login-core-feature {
+    font-size: 10px;
+  }
+
+  .estrade-login .login-brand-footer {
+    display: none;
+  }
+}
+
+/* =====================================
+   REDUCED MOTION
+===================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .login-live-dot,
+  .login-dashboard-preview {
+    animation: none;
+  }
+
+  .login-core-feature {
+    transition: none;
+  }
+}
+
+/* ========================================
+   ESTRADE — SMART EVENT ECOSYSTEM
+======================================== */
+
+.login-ecosystem {
+  position: relative;
+
+  width: 100%;
+  max-width: 600px;
+
+  aspect-ratio: 600 / 360;
+
+  margin: 20px auto 15px;
+
+  isolation: isolate;
+}
+
+/* ========================================
+   CONNECTION LINES
+======================================== */
+
+.ecosystem-connections {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: 1;
+
+  overflow: visible;
+  pointer-events: none;
+}
+
+.ecosystem-connections line {
+  stroke: url(#ecosystem-line-gradient);
+  stroke-width: 1.5;
+  stroke-opacity: 0.55;
+
+  stroke-dasharray: 7 7;
+
+  animation: ecosystemFlow 16s linear infinite;
+}
+
+.ecosystem-connections circle {
+  fill: #eac58b;
+
+  filter: drop-shadow(0 0 5px #eac58b);
+
+  animation: ecosystemPulse 3s ease-in-out infinite;
+}
+
+/* ========================================
+   CENTER PLATFORM CARD
+======================================== */
+
+.ecosystem-center {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  width: 44%;
+  max-width: 240px;
+
+  padding: 18px 12px;
+
+  text-align: center;
+
+  background: linear-gradient(
+    145deg,
+    #fffdf9,
+    #f5ebe3
+  );
+
+  border: 1px solid #e8cfab;
+  border-radius: 12px;
+
+  box-shadow:
+    0 20px 45px rgba(20, 0, 6, 0.28),
+    0 0 35px rgba(234, 197, 139, 0.15);
+
+  z-index: 4;
+}
+
+.ecosystem-center-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+
+  margin: 0 auto 8px;
+
+  border-radius: 50%;
+
+  background: #f5e5d6;
+  color: #760719;
+}
+
+.ecosystem-center h3 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+
+  font-size: clamp(24px, 3vw, 38px);
+  font-weight: 600;
+
+  color: #760719;
+
+  line-height: 1;
+  margin: 0;
+}
+
+.ecosystem-center h3 span {
+  color: #c28d47;
+}
+
+.ecosystem-center > p {
+  font-family: "DM Sans", sans-serif;
+
+  font-size: 8px;
+  letter-spacing: 1.1px;
+
+  color: #85766f;
+
+  margin: 9px 0 12px;
+}
+
+.ecosystem-center-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 9px;
+
+  color: #716760;
+}
+
+.ecosystem-status-dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #72a58e;
+
+  box-shadow: 0 0 7px rgba(114, 165, 142, 0.6);
+}
+
+/* ========================================
+   FLOATING FEATURE CARDS
+======================================== */
+
+.ecosystem-feature {
+  position: absolute;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  width: 38%;
+  max-width: 215px;
+
+  padding: 12px 10px;
+
+  background: rgba(255, 250, 244, 0.97);
+
+  border: 1px solid rgba(234, 197, 139, 0.6);
+  border-radius: 9px;
+
+  box-shadow: 0 12px 30px rgba(20, 0, 6, 0.18);
+
+  z-index: 3;
+
+  animation: ecosystemFloat 5s ease-in-out infinite;
+
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.ecosystem-feature:hover {
+  border-color: #eac58b;
+
+  box-shadow:
+    0 15px 35px rgba(20, 0, 6, 0.24),
+    0 0 18px rgba(234, 197, 139, 0.22);
+}
+
+/* CARD POSITIONS */
+
+.ecosystem-events {
+  top: 9%;
+  left: 3%;
+}
+
+.ecosystem-team {
+  top: 9%;
+  right: 3%;
+
+  animation-delay: -1.5s;
+}
+
+.ecosystem-media {
+  bottom: 9%;
+  left: 3%;
+
+  animation-delay: -2.5s;
+}
+
+.ecosystem-certificates {
+  bottom: 9%;
+  right: 3%;
+
+  animation-delay: -3.5s;
+}
+
+/* CARD ICONS */
+
+.ecosystem-feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  background: #f5ebe3;
+  color: #760719;
+
+  border-radius: 7px;
+}
+
+/* CARD TYPOGRAPHY */
+
+.ecosystem-feature-text {
+  min-width: 0;
+}
+
+.ecosystem-feature h4 {
+  font-family: "DM Sans", sans-serif;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  line-height: 1.35;
+
+  color: #760719;
+
+  margin: 0 0 4px;
+}
+
+.ecosystem-feature p {
+  font-family: "DM Sans", sans-serif;
+
+  font-size: 9px;
+
+  line-height: 1.3;
+
+  color: #85766f;
+
+  margin: 0;
+}
+
+/* ========================================
+   BACKGROUND GLOW
+======================================== */
+
+.ecosystem-glow {
+  position: absolute;
+
+  width: 65%;
+  height: 80%;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  background: radial-gradient(
+    circle,
+    rgba(234, 197, 139, 0.18),
+    transparent 70%
+  );
+
+  filter: blur(25px);
+
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ========================================
+   ANIMATIONS
+======================================== */
+
+@keyframes ecosystemFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+@keyframes ecosystemFlow {
+  to {
+    stroke-dashoffset: -140;
+  }
+}
+
+@keyframes ecosystemPulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 1000px) {
+  .ecosystem-feature {
+    padding: 8px 7px;
+    gap: 6px;
+  }
+
+  .ecosystem-feature-icon {
+    width: 27px;
+    height: 27px;
+  }
+
+  .ecosystem-feature-icon svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .ecosystem-feature h4 {
+    font-size: 9px;
+  }
+
+  .ecosystem-feature p {
+    font-size: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-ecosystem {
+    max-width: 540px;
+    margin: 25px auto;
+  }
+}
+
+@media (max-width: 400px) {
+  .ecosystem-feature {
+    width: 40%;
+    padding: 7px 5px;
+    gap: 5px;
+  }
+
+  .ecosystem-feature-icon {
+    width: 23px;
+    height: 23px;
+  }
+
+  .ecosystem-feature p {
+    display: none;
+  }
+
+  .ecosystem-center {
+    padding: 12px 5px;
+  }
+
+  .ecosystem-center > p {
+    font-size: 7px;
+  }
+
+  .ecosystem-center-status {
+    font-size: 8px;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .ecosystem-feature,
+  .ecosystem-connections line,
+  .ecosystem-connections circle {
+    animation: none !important;
+  }
+}

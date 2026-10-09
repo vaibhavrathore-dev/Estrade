@@ -78,3 +78,11 @@ def login(
     return TokenResponse(
         access_token=token
     )
+
+
+from app.core.dependencies import get_current_user
+from app.models.user import User
+
+@router.get("/me", response_model=RegisterResponse)
+def me(user: User = Depends(get_current_user)):
+    return RegisterResponse(id=user.id, full_name=user.full_name, email=user.email, user_type=user.user_type)

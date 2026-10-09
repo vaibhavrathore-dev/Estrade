@@ -7,7 +7,7 @@ import {
   Settings
 } from "lucide-react";
 
-function Sidebar({ activePage = "Overview", onNavigate }) {
+function Sidebar({ activePage = "Overview", onNavigate, role = "Campus" }) {
 
   const menuItems = [
     { name: "Overview", icon: House },
@@ -15,6 +15,7 @@ function Sidebar({ activePage = "Overview", onNavigate }) {
     { name: "Coordinators", icon: Users },
     { name: "Tasks", icon: SquareCheck },
     { name: "Media", icon: Image },
+    { name: "Certificates", icon: SquareCheck },
     { name: "Settings", icon: Settings }
   ];
 
@@ -25,7 +26,7 @@ function Sidebar({ activePage = "Overview", onNavigate }) {
 
       <div className="sidebar-brand">
         <h1>estrade</h1>
-        <p>Faculty workspace</p>
+        <p>{role} workspace</p>
       </div>
 
       {/* Navigation Menu */}

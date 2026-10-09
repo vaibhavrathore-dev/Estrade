@@ -121,7 +121,7 @@
 .login-brand-label {
   display: block;
 
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-body);
   font-size: 11px;
 
   letter-spacing: 3px;
@@ -134,7 +134,7 @@
 /* LARGE BRAND HEADING */
 
 .login-brand-content h1 {
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: clamp(65px, 6vw, 110px);
   font-weight: 500;
@@ -155,7 +155,7 @@
 /* DESCRIPTION */
 
 .login-brand-content p {
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 19px;
   line-height: 1.8;
@@ -179,7 +179,7 @@
 }
 
 .login-brand-tagline {
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-body);
   font-size: 11px;
 
   letter-spacing: 3px;
@@ -193,7 +193,7 @@
   position: relative;
   z-index: 2;
 
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-body);
   font-size: 12px;
 
   color: rgba(255, 255, 255, 0.55);
@@ -232,7 +232,7 @@
 
   gap: 10px;
 
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-body);
   font-size: 13px;
 
   color: #85766f;
@@ -255,7 +255,7 @@
 .login-small-label {
   display: block;
 
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-body);
   font-size: 11px;
 
   letter-spacing: 3px;
@@ -266,7 +266,7 @@
 }
 
 .login-heading h2 {
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: clamp(65px, 6vw, 95px);
   font-weight: 500;
@@ -284,7 +284,7 @@
 }
 
 .login-heading > p {
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 16px;
   line-height: 1.7;
@@ -315,7 +315,7 @@
 /* INPUT LABEL */
 
 .login-field label {
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-body);
 
   font-size: 13px;
   font-weight: 500;
@@ -368,7 +368,7 @@
 
   background: transparent;
 
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-body);
   font-size: 14px;
 
   color: #302522;
@@ -391,7 +391,7 @@
 }
 
 .login-password-header a {
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-body);
   font-size: 12px;
 
   color: #760719;
@@ -444,7 +444,7 @@
   border: none;
   border-radius: 5px;
 
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-body);
   font-size: 14px;
   font-weight: 600;
 
@@ -477,7 +477,7 @@
 
   color: #760719;
 
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-body);
   font-size: 13px;
 }
 
@@ -496,7 +496,7 @@
 }
 
 .login-signup p {
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-body);
   font-size: 13px;
 
   color: #77716d;
@@ -518,7 +518,7 @@
 ========================================== */
 
 .login-form-footer {
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 13px;
   font-style: italic;
@@ -666,7 +666,7 @@
 
   gap: 11px;
 
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-body);
   font-size: 10px;
 
   letter-spacing: 2.4px;
@@ -693,7 +693,7 @@
 /* MAIN HEADING */
 
 .login-showcase-content h1 {
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: clamp(48px, 4.4vw, 78px);
   font-weight: 500;
@@ -714,7 +714,7 @@
 /* DESCRIPTION */
 
 .login-showcase-description {
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: 16px;
   line-height: 1.6;
@@ -761,7 +761,7 @@
 
   color: #85766f;
 
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-body);
   font-size: 9px;
   letter-spacing: 1px;
 }
@@ -821,7 +821,7 @@
 
   color: #f4e8e2;
 
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-body);
   font-size: 12px;
 
   transition:
@@ -1073,7 +1073,7 @@
 }
 
 .ecosystem-center > p {
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-body);
 
   font-size: 8px;
   letter-spacing: 1.1px;
@@ -1090,7 +1090,7 @@
 
   gap: 6px;
 
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-body);
   font-size: 9px;
 
   color: #716760;
@@ -1201,7 +1201,7 @@
 }
 
 .ecosystem-feature h4 {
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-body);
 
   font-size: 10px;
   font-weight: 600;
@@ -1214,7 +1214,7 @@
 }
 
 .ecosystem-feature p {
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-body);
 
   font-size: 9px;
 

@@ -7,7 +7,7 @@ import {
   ChevronDown
 } from "lucide-react";
 
-function Topbar({ onSearchChange, onCreateEvent }) {
+function Topbar({ onSearchChange, onCreateEvent, user, pending = 0 }) {
 
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -59,7 +59,7 @@ function Topbar({ onSearchChange, onCreateEvent }) {
 
             <Bell size={21} strokeWidth={1.7} />
 
-            <span className="notification-dot"></span>
+            {pending > 0 && <span className="notification-dot"></span>}
 
           </button>
 
@@ -72,17 +72,7 @@ function Topbar({ onSearchChange, onCreateEvent }) {
 
               <h3>Announcements</h3>
 
-              <p>
-                BRAIN2BUILD Hackathon starts tomorrow.
-              </p>
-
-              <p>
-                A coordinator withdrawal requires attention.
-              </p>
-
-              <p>
-                Faculty meeting scheduled for event preparation.
-              </p>
+              <p>{pending} pending withdrawal requests.</p>
 
             </div>
 
@@ -96,11 +86,11 @@ function Topbar({ onSearchChange, onCreateEvent }) {
         <div className="faculty-profile">
 
           <span className="faculty-avatar">
-            PS
+            {user?.full_name?.slice(0, 2).toUpperCase()}
           </span>
 
           <span className="faculty-name">
-            Faculty
+            {user?.full_name}
           </span>
 
           <ChevronDown size={16} />
@@ -113,6 +103,8 @@ function Topbar({ onSearchChange, onCreateEvent }) {
         <button
           type="button"
           className="create-event-button"
+          aria-label="Create Event"
+          aria-haspopup="dialog"
           onClick={() => onCreateEvent?.()}
         >
 

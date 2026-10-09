@@ -1,42 +1,6 @@
 import { ArrowRight } from "lucide-react";
 
-function UpcomingEvents({ searchQuery = "", onViewEvent }) {
-
-  const events = [
-    {
-      id: 1,
-      day: "09",
-      month: "OCT",
-      name: "BRAIN2BUILD Hackathon",
-      time: "10:00 AM",
-      venue: "CSE Department",
-      coordinators: 6,
-      status: "Needs attention",
-      color: "yellow",
-    },
-    {
-      id: 2,
-      day: "16",
-      month: "OCT",
-      name: "Cultural Fest",
-      time: "5:00 PM",
-      venue: "Main Auditorium",
-      coordinators: 5,
-      status: "On track",
-      color: "green",
-    },
-    {
-      id: 3,
-      day: "21",
-      month: "OCT",
-      name: "Technical Workshop",
-      time: "11:00 AM",
-      venue: "Innovation Lab",
-      coordinators: 4,
-      status: "Planning",
-      color: "blue",
-    },
-  ];
+function UpcomingEvents({ searchQuery = "", onViewEvent, events = [], title = "Upcoming Events" }) {
 
   // Filter events using the search bar
 
@@ -51,7 +15,7 @@ function UpcomingEvents({ searchQuery = "", onViewEvent }) {
 
       <div className="section-title-row">
 
-        <h2>Upcoming Events</h2>
+        <h2>{title}</h2>
 
         <button
           type="button"

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import LoginEcosystem from "../components/LoginEcosystem";
+import { useNavigate, useLocation } from "react-router-dom";
+import { authAPI } from "../services/api";
 
 import {
   Eye,
@@ -7,11 +9,7 @@ import {
   ArrowRight,
   ArrowLeft,
   Mail,
-  LockKeyhole,
-  CalendarDays,
-  UsersRound,
-  ScanSearch,
-  Award
+  LockKeyhole
 } from "lucide-react";
 
 import { Link } from "react-router-dom";
@@ -19,18 +17,38 @@ import { Link } from "react-router-dom";
 import "./Login.css";
 
 function Login() {
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(location.state?.message || "");
 
-  const handleLogin = (e) => {
-    e.preventDefault();
 
-    // Backend authentication will be connected later.
-    setMessage("Login authentication is not connected yet.");
-  };
+const handleLogin = async (e) => {
+  e.preventDefault();
+
+  setMessage("Signing in...");
+
+  setLoading(true);
+  try {
+    const result = await authAPI.login({
+      email,
+      password,
+    });
+
+    authAPI.setToken(result.access_token);
+
+    navigate("/dashboard");
+  } catch (error) {
+    setMessage(error.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="estrade-login">
@@ -157,7 +175,7 @@ function Login() {
                   Password
                 </label>
 
-                <Link to="/forgot-password">
+                <Link to="/forgot-password" onClick={e => {e.preventDefault(); setMessage("Password reset is not available yet. Contact your event administrator.");}}>
                   Forgot Password?
                 </Link>
 
@@ -198,7 +216,7 @@ function Login() {
 
             {/* SIGN IN BUTTON */}
 
-            <button type="submit" className="login-submit">
+            <button type="submit" disabled={loading} className="login-submit">
               Sign In
               <ArrowRight size={19} />
             </button>

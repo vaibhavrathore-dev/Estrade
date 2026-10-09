@@ -57,7 +57,7 @@
 }
 
 .nav-links a {
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
   font-size: 14px;
 
   color: var(--text-dark);
@@ -85,7 +85,7 @@
 }
 
 .login-link {
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
   font-size: 14px;
   text-decoration: none;
   color: var(--text-dark);
@@ -98,7 +98,7 @@
   padding: 12px 30px;
   border-radius: 4px;
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
   font-size: 14px;
   text-decoration: none;
 
@@ -131,7 +131,7 @@
 /* SUBTITLE */
 
 .hero-subtitle {
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
   font-size: 16px;
   color: var(--text-muted);
   margin-bottom: 15px;
@@ -140,7 +140,7 @@
 /* MAIN HEADING */
 
 .hero h1 {
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-body);
 
   font-size: clamp(64px, 6.5vw, 96px);
   font-weight: 500;
@@ -155,7 +155,7 @@
 /* DESCRIPTION */
 
 .hero-description {
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
   font-size: 20px;
   line-height: 1.35;
 
@@ -186,7 +186,7 @@
 
   border-radius: 4px;
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
   font-size: 17px;
   text-decoration: none;
 
@@ -204,7 +204,7 @@
 
   color: var(--burgundy);
 
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
   font-size: 16px;
   text-decoration: none;
 }

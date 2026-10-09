@@ -1,0 +1,7 @@
+opencv-python
+Pillow
+ImageHash
+numpy
+fastapi
+uvicorn
+python-multipart

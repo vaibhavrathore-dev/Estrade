@@ -6,6 +6,7 @@ import {
   Image,
   Settings
 } from "lucide-react";
+import LogoutButton from "./LogoutButton";
 
 function Sidebar({ activePage = "Overview", onNavigate }) {
 
@@ -54,6 +55,12 @@ function Sidebar({ activePage = "Overview", onNavigate }) {
         })}
 
       </nav>
+
+      {/* LOGOUT SECTION */}
+
+      <div className="sidebar-logout">
+        <LogoutButton />
+      </div>
 
       {/* Sidebar Footer */}
 

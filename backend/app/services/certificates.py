@@ -1,4 +1,3 @@
-import os
 from hashlib import sha256
 from io import BytesIO
 from xml.sax.saxutils import escape
@@ -10,6 +9,8 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Paragraph
 from reportlab.graphics import renderPDF
+
+from app.core.config import settings
 
 
 BURGUNDY = HexColor("#760719")
@@ -221,10 +222,7 @@ def certificate_pdf(certificate):
         or str(certificate.id)
     )
 
-    public_base_url = os.getenv(
-        "ESTRADE_PUBLIC_BASE_URL",
-        "http://127.0.0.1:8000",
-    ).rstrip("/")
+    public_base_url = settings.ESTRADE_PUBLIC_BASE_URL.rstrip("/")
 
     verification_payload = (
         f"{public_base_url}/api/v1/"

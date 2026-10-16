@@ -8,6 +8,8 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 
+from app.core.config import settings
+
 
 GMAIL_SCOPES = [
     "https://www.googleapis.com/auth/gmail.send",
@@ -72,7 +74,7 @@ def send_certificate_email(
         cache_discovery=False,
     )
 
-    sender = os.getenv("ESTRADE_GMAIL_SENDER")
+    sender = settings.ESTRADE_GMAIL_SENDER
 
     if not sender:
         raise RuntimeError(

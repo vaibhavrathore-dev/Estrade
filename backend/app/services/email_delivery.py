@@ -72,11 +72,12 @@ def send_certificate_email(
         cache_discovery=False,
     )
 
-    sender = (
-        service.users()
-        .getProfile(userId="me")
-        .execute()["emailAddress"]
-    )
+    sender = os.getenv("ESTRADE_GMAIL_SENDER")
+
+    if not sender:
+        raise RuntimeError(
+            "ESTRADE_GMAIL_SENDER is not configured"
+        )
 
     message = EmailMessage()
 

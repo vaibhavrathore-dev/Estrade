@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from uuid import uuid4
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, Response
 from pydantic import BaseModel, EmailStr, Field
@@ -9,7 +10,7 @@ from app.core.dependencies import get_current_user
 from app.db.session import get_db
 from app.models import User, Participation, Certificate, EventRegistration, Attendance
 from app.services.access import get_event, can_manage
-from app.services.certificates import certificate_pdf
+from app.services.certificates import certificate_pdf, certificate_hash
 router = APIRouter(prefix='/api/v1', tags=['Certificates'])
 
 class ConfirmParticipation(BaseModel):
@@ -165,9 +166,21 @@ def issue(participation_id: UUID, db: Session = Depends(get_db), user: User = De
         participant_name=registration.certificate_name,
         event_title=event.title,
         event_date=event.starts_at,
+        college_name='Amritsar Group of Colleges',
+        department_name='Department of Computer Science & Engineering',
+        signatory_name='Head of Department',
+        verification_code=f'EST-{uuid4().hex[:12].upper()}',
+        delivery_status='pending',
     )
+
     db.add(record)
+
     try:
+        db.flush()
+
+        pdf_bytes = certificate_pdf(record)
+        record.file_hash_sha256 = certificate_hash(pdf_bytes)
+
         db.commit()
     except IntegrityError:
         db.rollback()
@@ -188,10 +201,47 @@ def download(certificate_id: UUID, db: Session = Depends(get_db), user: User = D
 @router.get('/certificates/{certificate_id}/verify')
 def verify(certificate_id: UUID, db: Session = Depends(get_db)):
     record = db.get(Certificate, certificate_id)
+
     if record is None:
         raise HTTPException(404, 'Certificate not found')
-    # Opaque UUID, no email, account ID, evidence, or private event title is exposed.
-    return {'id': record.id, 'valid': True, 'certificate_type': record.certificate_type, 'issued_at': record.created_at}
+
+    return {
+        'id': record.id,
+        'verification_code': record.verification_code,
+        'valid': True,
+        'certificate_type': record.certificate_type,
+        'issued_at': record.created_at,
+    }
+
+
+@router.get('/certificate-verification/{verification_code}')
+def verify_by_code(
+    verification_code: str,
+    db: Session = Depends(get_db),
+):
+    record = db.scalar(
+        select(Certificate).where(
+            Certificate.verification_code == verification_code
+        )
+    )
+
+    if record is None:
+        raise HTTPException(
+            404,
+            'Certificate not found',
+        )
+
+    return {
+        'valid': True,
+        'verification_code': record.verification_code,
+        'participant_name': record.participant_name,
+        'event_title': record.event_title,
+        'event_date': record.event_date,
+        'college_name': record.college_name,
+        'department_name': record.department_name,
+        'certificate_type': record.certificate_type,
+        'issued_at': record.created_at,
+    }
 
 @router.get('/certificates')
 def my_certificates(db: Session = Depends(get_db), user: User = Depends(get_current_user)):

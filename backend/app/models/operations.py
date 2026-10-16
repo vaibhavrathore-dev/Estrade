@@ -42,8 +42,15 @@ class Participation(Base):
 
 class Certificate(Base):
     __tablename__ = 'certificates'
-    __table_args__ = (UniqueConstraint('participation_id', 'certificate_type', name='uq_certificate_issuance'),
-        CheckConstraint("certificate_type = 'participation'", name='ck_certificate_type'))
+    __table_args__ = (
+        UniqueConstraint('participation_id', 'certificate_type', name='uq_certificate_issuance'),
+        UniqueConstraint('verification_code', name='uq_certificate_verification_code'),
+        CheckConstraint("certificate_type = 'participation'", name='ck_certificate_type'),
+        CheckConstraint(
+            "delivery_status IN ('pending','sent','failed')",
+            name='ck_certificate_delivery_status'
+        ),
+    )
     id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
     participation_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('event_participations.id'))
     certificate_type: Mapped[str] = mapped_column(String(30), default='participation')
@@ -51,7 +58,34 @@ class Certificate(Base):
     participant_name: Mapped[str] = mapped_column(String(150))
     event_title: Mapped[str] = mapped_column(String(200))
     event_date: Mapped[datetime] = mapped_column(DateTime(timezone=True))
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    college_name: Mapped[str | None] = mapped_column(String(200))
+    department_name: Mapped[str | None] = mapped_column(String(200))
+    signatory_name: Mapped[str | None] = mapped_column(String(150))
+
+    verification_code: Mapped[str | None] = mapped_column(
+        String(80),
+        unique=True,
+    )
+
+    file_hash_sha256: Mapped[str | None] = mapped_column(
+        String(64),
+    )
+
+    delivery_status: Mapped[str] = mapped_column(
+        String(20),
+        default='pending',
+        server_default='pending',
+    )
+
+    emailed_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+    )
 
 class MediaAnalysis(Base):
     __tablename__ = 'media_analyses'

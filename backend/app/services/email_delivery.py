@@ -24,36 +24,8 @@ TOKEN_FILE = Path(
 
 
 def _credentials():
-    token_json = os.getenv("ESTRADE_GOOGLE_TOKEN_JSON")
-
-    if token_json:
-        credentials = Credentials.from_authorized_user_info(
-            json.loads(token_json),
-            GMAIL_SCOPES,
-        )
-    else:
-        if not TOKEN_FILE.exists():
-            raise RuntimeError(
-                "Google Gmail account is not connected"
-            )
-
-        credentials = Credentials.from_authorized_user_file(
-            TOKEN_FILE,
-            GMAIL_SCOPES,
-        )
-
-    if credentials.expired and credentials.refresh_token:
-        credentials.refresh(Request())
-
-        if not token_json:
-            TOKEN_FILE.write_text(credentials.to_json())
-
-    if not credentials.valid:
-        raise RuntimeError(
-            "Google Gmail authorization is invalid"
-        )
-
-    return credentials
+    from app.services.google_auth import google_credentials
+    return google_credentials()
 
 
 def send_certificate_email(

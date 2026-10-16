@@ -6,6 +6,8 @@ from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseUpload
 
+from app.services.google_auth import google_credentials
+
 
 TOKEN_FILE = Path("google_token.json")
 
@@ -18,22 +20,7 @@ FOLDER_MIME = "application/vnd.google-apps.folder"
 
 
 def _drive_credentials():
-    if not TOKEN_FILE.exists():
-        raise RuntimeError("Google Drive account is not connected")
-
-    credentials = Credentials.from_authorized_user_file(
-        TOKEN_FILE,
-        SCOPES,
-    )
-
-    if credentials.expired and credentials.refresh_token:
-        credentials.refresh(Request())
-        TOKEN_FILE.write_text(credentials.to_json())
-
-    if not credentials.valid:
-        raise RuntimeError("Google Drive authorization is invalid")
-
-    return credentials
+    return google_credentials()
 
 
 def _service():

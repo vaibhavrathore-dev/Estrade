@@ -11,6 +11,7 @@ from app.db.session import get_db
 from app.models import User, Participation, Certificate, EventRegistration, Attendance
 from app.services.access import get_event, can_manage
 from app.services.certificates import certificate_pdf, certificate_hash
+from app.services.email_delivery import send_certificate_email
 router = APIRouter(prefix='/api/v1', tags=['Certificates'])
 
 class ConfirmParticipation(BaseModel):
@@ -185,7 +186,31 @@ def issue(participation_id: UUID, db: Session = Depends(get_db), user: User = De
     except IntegrityError:
         db.rollback()
         raise HTTPException(409, 'Certificate already issued for this participation and type')
-    return {'id': record.id, 'download_url': f'/api/v1/certificates/{record.id}/download'}
+    try:
+        send_certificate_email(
+            recipient_email=participant.email,
+            participant_name=record.participant_name,
+            event_title=record.event_title,
+            event_date=record.event_date,
+            certificate_code=record.verification_code,
+            pdf_bytes=certificate_pdf(record),
+        )
+
+        record.delivery_status = 'sent'
+        record.emailed_at = datetime.now(timezone.utc)
+
+    except Exception:
+        record.delivery_status = 'failed'
+        record.emailed_at = None
+
+    db.commit()
+
+    return {
+        'id': record.id,
+        'download_url': f'/api/v1/certificates/{record.id}/download',
+        'verification_code': record.verification_code,
+        'delivery_status': record.delivery_status,
+    }
 
 @router.get('/certificates/{certificate_id}/download')
 def download(certificate_id: UUID, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
@@ -242,6 +267,105 @@ def verify_by_code(
         'certificate_type': record.certificate_type,
         'issued_at': record.created_at,
     }
+
+
+
+@router.post('/certificates/{certificate_id}/email')
+def retry_certificate_email(
+    certificate_id: UUID,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    record = db.get(Certificate, certificate_id)
+
+    if record is None:
+        raise HTTPException(
+            404,
+            'Certificate not found',
+        )
+
+    participation = db.get(
+        Participation,
+        record.participation_id,
+    )
+
+    event = get_event(
+        db,
+        user,
+        participation.event_id,
+        manage=True,
+    )
+
+    participant = db.get(
+        User,
+        participation.user_id,
+    )
+
+    try:
+        message_id = send_certificate_email(
+            recipient_email=participant.email,
+            participant_name=record.participant_name,
+            event_title=record.event_title,
+            event_date=record.event_date,
+            certificate_code=record.verification_code,
+            pdf_bytes=certificate_pdf(record),
+        )
+
+        record.delivery_status = 'sent'
+        record.emailed_at = datetime.now(timezone.utc)
+
+        db.commit()
+
+        return {
+            'certificate_id': record.id,
+            'delivery_status': 'sent',
+            'message_id': message_id,
+        }
+
+    except Exception:
+        record.delivery_status = 'failed'
+        record.emailed_at = None
+        db.commit()
+
+        raise HTTPException(
+            502,
+            'Certificate exists, but email delivery failed',
+        )
+
+
+@router.get('/certificates/{certificate_id}/delivery')
+def certificate_delivery_status(
+    certificate_id: UUID,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    record = db.get(Certificate, certificate_id)
+
+    if record is None:
+        raise HTTPException(
+            404,
+            'Certificate not found',
+        )
+
+    participation = db.get(
+        Participation,
+        record.participation_id,
+    )
+
+    if user.id != participation.user_id:
+        get_event(
+            db,
+            user,
+            participation.event_id,
+            manage=True,
+        )
+
+    return {
+        'certificate_id': record.id,
+        'delivery_status': record.delivery_status,
+        'emailed_at': record.emailed_at,
+    }
+
 
 @router.get('/certificates')
 def my_certificates(db: Session = Depends(get_db), user: User = Depends(get_current_user)):

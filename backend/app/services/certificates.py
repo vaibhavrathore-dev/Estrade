@@ -1,3 +1,4 @@
+import os
 from hashlib import sha256
 from io import BytesIO
 from xml.sax.saxutils import escape
@@ -220,8 +221,14 @@ def certificate_pdf(certificate):
         or str(certificate.id)
     )
 
+    public_base_url = os.getenv(
+        "ESTRADE_PUBLIC_BASE_URL",
+        "http://127.0.0.1:8000",
+    ).rstrip("/")
+
     verification_payload = (
-        f"ESTRADE-CERTIFICATE:{verification_code}"
+        f"{public_base_url}/api/v1/"
+        f"certificate-verification/{verification_code}"
     )
 
     _draw_qr(

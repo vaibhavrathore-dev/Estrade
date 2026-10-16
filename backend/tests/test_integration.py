@@ -433,3 +433,18 @@ def test_round2_complete_event_lifecycle(context, monkeypatch):
 
     assert delivery.status_code == 200
     assert delivery.json()["delivery_status"] == "sent"
+
+
+def test_health_and_database_readiness(context):
+    client, db, admin, student, outsider, c, v, other = context
+
+    health = client.get("/api/v1/health")
+    assert health.status_code == 200
+    assert health.json() == {"status": "ok"}
+
+    ready = client.get("/api/v1/ready")
+    assert ready.status_code == 200
+    assert ready.json() == {
+        "status": "ready",
+        "database": "ok",
+    }

@@ -1,6 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text as sql_text
+from sqlalchemy.orm import Session
 from app.core.config import settings
+from app.db.session import get_db
 from app.routers.auth import router as auth_router
 from app.routers.events import router as events_router
 
@@ -23,6 +26,22 @@ app.include_router(events_router)
 @app.get("/api/v1/health")
 def health():
     return {"status": "ok"}
+
+
+@app.get("/api/v1/ready")
+def readiness(db: Session = Depends(get_db)):
+    try:
+        db.execute(sql_text("SELECT 1"))
+    except Exception:
+        raise HTTPException(
+            status_code=503,
+            detail="Database unavailable",
+        )
+
+    return {
+        "status": "ready",
+        "database": "ok",
+    }
 from app.routers.catalog import router as catalog_router
 app.include_router(catalog_router)
 

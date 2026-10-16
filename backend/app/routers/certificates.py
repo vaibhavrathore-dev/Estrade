@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from app.core.dependencies import get_current_user
 from app.db.session import get_db
-from app.models import User, Participation, Certificate
+from app.models import User, Participation, Certificate, EventRegistration, Attendance
 from app.services.access import get_event, can_manage
 from app.services.certificates import certificate_pdf
 router = APIRouter(prefix='/api/v1', tags=['Certificates'])
@@ -37,6 +37,82 @@ def confirm(event_id: UUID, data: ConfirmParticipation, db: Session = Depends(ge
     db.commit()
     return {'id': record.id, 'full_name': target.full_name}
 
+
+@router.post('/registrations/{registration_id}/participation', status_code=201)
+def approve_registered_participation(
+    registration_id: UUID,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    registration = db.get(EventRegistration, registration_id)
+
+    if registration is None:
+        raise HTTPException(404, 'Registration not found')
+
+    event = get_event(
+        db,
+        user,
+        registration.event_id,
+        manage=True,
+    )
+
+    if event.status != 'confirmed' or event.ends_at > datetime.now(timezone.utc):
+        raise HTTPException(
+            422,
+            'Participation can only be approved after the confirmed event has ended',
+        )
+
+    attendance = db.scalar(
+        select(Attendance).where(
+            Attendance.registration_id == registration.id
+        )
+    )
+
+    if attendance is None:
+        raise HTTPException(
+            422,
+            'Participant must complete QR check-in before participation can be verified',
+        )
+
+    existing = db.scalar(
+        select(Participation).where(
+            Participation.event_id == event.id,
+            Participation.user_id == registration.user_id,
+        )
+    )
+
+    if existing:
+        participant = db.get(User, registration.user_id)
+        return {
+            'id': existing.id,
+            'full_name': participant.full_name,
+            'certificate_name': registration.certificate_name,
+            'verified': True,
+            'source': 'qr_attendance',
+        }
+
+    record = Participation(
+        event_id=event.id,
+        user_id=registration.user_id,
+        verified_by=user.id,
+        evidence='Verified through Estrade QR attendance',
+    )
+
+    db.add(record)
+    db.commit()
+    db.refresh(record)
+
+    participant = db.get(User, registration.user_id)
+
+    return {
+        'id': record.id,
+        'full_name': participant.full_name,
+        'certificate_name': registration.certificate_name,
+        'verified': True,
+        'source': 'qr_attendance',
+    }
+
+
 @router.get('/events/{event_id}/participations')
 def participants(event_id: UUID, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     event = get_event(db, user, event_id)
@@ -56,8 +132,40 @@ def issue(participation_id: UUID, db: Session = Depends(get_db), user: User = De
     if event.status != 'confirmed' or event.ends_at > datetime.now(timezone.utc):
         raise HTTPException(422, 'Only completed confirmed events are eligible')
     participant = db.get(User, participation.user_id)
-    record = Certificate(participation_id=participation.id, issued_by=user.id, participant_name=participant.full_name,
-                         event_title=event.title, event_date=event.starts_at)
+
+    registration = db.scalar(
+        select(EventRegistration).where(
+            EventRegistration.event_id == event.id,
+            EventRegistration.user_id == participation.user_id,
+            EventRegistration.status == 'registered',
+        )
+    )
+
+    if registration is None:
+        raise HTTPException(
+            422,
+            'A valid Estrade event registration is required before certificate issuance',
+        )
+
+    attendance = db.scalar(
+        select(Attendance).where(
+            Attendance.registration_id == registration.id
+        )
+    )
+
+    if attendance is None:
+        raise HTTPException(
+            422,
+            'Verified QR attendance is required before certificate issuance',
+        )
+
+    record = Certificate(
+        participation_id=participation.id,
+        issued_by=user.id,
+        participant_name=registration.certificate_name,
+        event_title=event.title,
+        event_date=event.starts_at,
+    )
     db.add(record)
     try:
         db.commit()

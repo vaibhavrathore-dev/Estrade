@@ -12,7 +12,7 @@ from app.main import app
 from app.db.session import engine, get_db
 from app.core.config import settings
 from app.core.security import hash_password, create_access_token
-from app.models import User, Committee, CommitteeMember, Venue, Event
+from app.models import User, Committee, CommitteeMember, Venue, Event, EventRegistration, Attendance
 
 @pytest.fixture
 def context():
@@ -122,6 +122,24 @@ def test_certificates(context):
     assert client.post(f"/api/v1/events/{future['id']}/participations", json=body, headers=headers(admin)).status_code == 422
     start = datetime.now(timezone.utc) - timedelta(days=2)
     event = create(client, admin, c, v, starts_at=start.isoformat(), ends_at=(start+timedelta(hours=1)).isoformat())
+
+    registration = EventRegistration(
+        event_id=event['id'],
+        user_id=student.id,
+        certificate_name=student.full_name,
+        status='registered',
+    )
+    db.add(registration)
+    db.flush()
+
+    db.add(
+        Attendance(
+            registration_id=registration.id,
+            checked_in_by=admin.id,
+        )
+    )
+    db.commit()
+
     url = f"/api/v1/events/{event['id']}/participations"
     assert client.post(url, json=body, headers=headers(student)).status_code == 403
     p = client.post(url, json=body, headers=headers(admin)); assert p.status_code == 201, p.text

@@ -81,6 +81,7 @@ def certificate_pdf(certificate):
     page = canvas.Canvas(
         output,
         pagesize=(842, 595),
+        invariant=1,
     )
 
     page.setTitle(

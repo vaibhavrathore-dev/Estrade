@@ -35,3 +35,8 @@ from app.routers.media import router as media_router
 from app.routers.certificates import router as certificates_router
 app.include_router(media_router)
 app.include_router(certificates_router)
+
+
+from app.routers.registrations import router as registrations_router
+app.include_router(registrations_router)
+

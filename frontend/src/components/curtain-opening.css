@@ -209,3 +209,146 @@
   .estrade-opening__curtain, .estrade-opening__pelmet, .estrade-opening__stage-name,
   .estrade-opening__tagline, .estrade-opening__halo { transition-duration: 0.01ms !important; }
 }
+/* =========================================
+   ESTRADE — ELEGANT IVORY SHOWCASE
+   Preserve original typography
+========================================= */
+
+.hero-stage.estrade-theatre-showcase {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Remove the heavy theatrical frame */
+.estrade-theatre-showcase__arch,
+.estrade-theatre-showcase__floor,
+.estrade-theatre-showcase__footer {
+  display: none;
+}
+
+/* Keep a subtle spotlight */
+.estrade-theatre-showcase__beam {
+  opacity: 0.12;
+}
+
+.estrade-theatre-showcase__glow {
+  background: radial-gradient(
+    ellipse,
+    rgba(185, 113, 66, 0.12),
+    transparent 70%
+  );
+}
+
+/* Original fonts and sizing remain unchanged */
+.estrade-theatre-showcase__name {
+  color: #760719;
+}
+
+.estrade-theatre-showcase__name span {
+  color: #a31930;
+}
+
+.estrade-theatre-showcase__overline {
+  color: #760719;
+}
+
+.estrade-theatre-showcase__content p {
+  color: #762b36;
+}
+/* ===================================
+   ESTRADE — BORDERLESS HERO SHOWCASE
+   Original fonts and animations kept
+=================================== */
+
+/* Remove rectangular background and shadow */
+.hero-stage.estrade-theatre-showcase {
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Remove any decorative rectangular overlays */
+.hero-stage.estrade-theatre-showcase::before,
+.hero-stage.estrade-theatre-showcase::after {
+  display: none !important;
+}
+
+/* Hide stage frame and bottom border */
+.estrade-theatre-showcase__arch,
+.estrade-theatre-showcase__floor,
+.estrade-theatre-showcase__footer {
+  display: none !important;
+}
+
+/* Remove the visible spotlight beam shape */
+.estrade-theatre-showcase__beam {
+  display: none !important;
+}
+
+/* Keep only a very soft background glow */
+.estrade-theatre-showcase__glow {
+  opacity: 0.25;
+  background: radial-gradient(
+    ellipse,
+    rgba(118, 7, 25, 0.06),
+    transparent 70%
+  ) !important;
+}
+
+/* Keep your friend's original font */
+.estrade-theatre-showcase__name {
+  color: #760719;
+}
+
+.estrade-theatre-showcase__name span {
+  color: #760719;
+}
+
+.estrade-theatre-showcase__overline,
+.estrade-theatre-showcase__content p {
+  color: #760719;
+}
+/* Elegant spotlight — turns on when hovered */
+
+.hero-stage.estrade-theatre-showcase {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  cursor: default;
+}
+
+/* Spotlight is OFF by default */
+.hero-stage.estrade-theatre-showcase::before {
+  content: "";
+  display: block !important;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+
+  background: radial-gradient(
+    ellipse 55% 65% at 50% 45%,
+    rgba(255, 215, 145, 0.45) 0%,
+    rgba(255, 230, 185, 0.18) 45%,
+    transparent 75%
+  );
+
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+/* Spotlight turns ON when cursor enters */
+.hero-stage.estrade-theatre-showcase:hover::before {
+  opacity: 1;
+}
+
+/* Keep original Estrade logo above spotlight */
+.estrade-theatre-showcase__content {
+  position: relative;
+  z-index: 2;
+}

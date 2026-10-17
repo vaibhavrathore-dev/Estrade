@@ -1,0 +1,334 @@
+/* ESTRADE — faculty dashboard redesign. Dashboard-only skin;
+   the landing, cinematic curtains and backend API remain untouched. */
+.estrade-dashboard {
+  --ed-wine: #760719;
+  --ed-wine-dark: #510b1b;
+  --ed-surface: #fffdf9;
+  --ed-canvas: #faf8f3;
+  --ed-line: #e8dfd6;
+  --ed-muted: #746c67;
+  color: #32282a;
+  background: var(--ed-canvas);
+}
+.estrade-dashboard .dashboard-sidebar {
+  width: 238px;
+  min-width: 238px;
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  min-height: 100dvh;
+  background: #650c20;
+  border: 0;
+  box-shadow: inset -1px 0 #ffffff12;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.estrade-dashboard .sidebar-brand { padding: 38px 26px 32px; }
+.estrade-dashboard .estrade-sidebar-kicker {
+  display: block; font-family: Arial, sans-serif; font-size: 10px;
+  font-weight: 600; letter-spacing: .23em; color: #ecc7cb; margin-bottom: 17px;
+}
+.estrade-dashboard .sidebar-brand h1 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  color: #fff9ef; font-size: 58px; font-weight: 500; letter-spacing: -.055em;
+}
+.estrade-dashboard .sidebar-brand h1 span { color: #e7b9a3; }
+.estrade-dashboard .sidebar-brand p { font-size: 12px; letter-spacing: .04em; margin-top: 14px; color: #e3c5c9; }
+.estrade-dashboard .estrade-sidebar-divider {
+  color: #d8b2b8; font: 600 10px Arial, sans-serif; letter-spacing: .19em;
+  padding: 0 27px 15px;
+}
+.estrade-dashboard .sidebar-navigation { padding: 0 13px; gap: 4px; }
+.estrade-dashboard .sidebar-link {
+  min-height: 46px; border-radius: 8px; border-left: 0 !important;
+  padding: 12px 14px; gap: 15px; font-size: 14px; color: #f0dfe2;
+}
+.estrade-dashboard .sidebar-link svg { flex-shrink: 0; }
+.estrade-dashboard .sidebar-link.selected,
+.estrade-dashboard .sidebar-link.selected:hover {
+  background: #fff9f2; color: #700e24; box-shadow: 0 2px 12px #30040d16;
+}
+.estrade-dashboard .sidebar-link:hover { background: #ffffff17; }
+.estrade-dashboard .estrade-nav-arrow { margin-left: auto; color: #9d6470; }
+.estrade-dashboard .estrade-sidebar-spacer { flex: 1; min-height: 20px; }
+.estrade-dashboard .estrade-sidebar-footnote {
+  margin: 0 27px 17px; padding-top: 20px; border-top: 1px solid #ffffff26;
+  color: #ffe1dd; font: italic 22px/1.18 "Cormorant Garamond", Georgia, serif;
+}
+.estrade-dashboard .sidebar-logout {
+  margin: 0 11px 0; padding: 4px 0; border-top: 0;
+}
+.estrade-dashboard .estrade-logout-btn { padding: 11px 16px; }
+.estrade-dashboard .sidebar-bottom {
+  margin: 0 28px 24px; padding-top: 12px; border-top: 0;
+  color: #d8b1b7; font-size: 11px;
+}
+.estrade-dashboard .estrade-preview-sidebar-foot { color: #ffdfd3; font: 600 10px Arial, sans-serif; letter-spacing: .09em; margin: 12px 25px; }
+.estrade-dashboard .dashboard-main { flex: 1; min-width: 0; }
+.estrade-dashboard .dashboard-topbar {
+  background: #fffdfa; height: 76px; padding: 0 clamp(20px, 3vw, 50px);
+  border-bottom: 1px solid var(--ed-line); box-shadow: none;
+}
+.estrade-dashboard .dashboard-search {
+  width: min(400px, 42vw); max-width: none; height: 42px;
+  border-radius: 9px; background: #f9f5f0;
+}
+.estrade-dashboard .dashboard-topbar .faculty-avatar {
+  background: #f0e0d9; border: 1px solid #e8d0c8; color: #760719;
+}
+.estrade-dashboard .dashboard-topbar .create-event-button { border-radius: 8px; box-shadow: none; }
+.estrade-dashboard .dashboard-main .dashboard-content {
+  width: 100%; max-width: 1520px; margin: auto;
+  padding: clamp(24px, 3vw, 45px) clamp(20px, 3vw, 50px) 80px;
+}
+.estrade-dashboard .dashboard-content .command-heading {
+  padding: 0 0 22px; border-bottom: 0; align-items: center;
+}
+.estrade-dashboard .dashboard-content .command-heading h1 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(42px, 3.6vw, 62px); line-height: 1.04;
+  color: #382227; letter-spacing: -.035em; font-weight: 500; margin: 9px 0 0;
+}
+.estrade-dashboard .dashboard-content .command-heading h1 em { color: #760719; font-weight: 500; }
+.estrade-dashboard .dashboard-content .command-heading p { font-size: 14px; margin: 12px 0 0; }
+.estrade-dashboard .eyebrow,
+.estrade-dashboard .estrade-section-kicker {
+  font: 700 10px/1.5 Arial, sans-serif; letter-spacing: .17em;
+  color: #8b3f4b;
+}
+.estrade-dashboard .estrade-overview-intro {
+  margin: 6px 0 14px; padding: 24px 28px;
+  background: linear-gradient(115deg, #f6ebe4 0%, #f8f1eb 56%, #fff9f0 100%);
+  border: 1px solid #eadbd2; border-radius: 12px;
+  display: flex; align-items: center; min-height: 116px;
+}
+.estrade-dashboard .estrade-overview-intro h2 {
+  font: 500 clamp(26px, 2.6vw, 38px)/1.1 "Cormorant Garamond", Georgia, serif;
+  color: #5a1d2c; max-width: 550px; margin: 9px 0 0;
+}
+.estrade-dashboard .estrade-quick-actions button,
+.estrade-dashboard .estrade-refresh-button { font-family: inherit; border-radius: 8px; }
+.estrade-dashboard .dashboard-content .dashboard-stats {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px; padding: 5px 0 24px; margin-bottom: 0;
+}
+.estrade-dashboard .dashboard-content .dashboard-stats .stat-item {
+  padding: 21px 20px 19px; text-align: left; border: 1px solid var(--ed-line);
+  border-radius: 11px; background: #fffdf9; box-shadow: none; overflow: hidden;
+}
+.estrade-dashboard .dashboard-content .dashboard-stats .stat-item:hover {
+  transform: translateY(-2px); box-shadow: 0 7px 24px #5215230a;
+}
+.estrade-dashboard .estrade-stat-upper {
+  display: flex; gap: 12px; align-items: center; justify-content: space-between;
+}
+.estrade-dashboard .estrade-stat-label {
+  color: #80716c; font: 700 10px/1.4 Arial, sans-serif; letter-spacing: .13em;
+}
+.estrade-dashboard .estrade-stat-icon {
+  display: inline-flex; padding: 9px; background: #f7ede7;
+  color: #851d36; border-radius: 8px;
+}
+.estrade-dashboard .dashboard-content .dashboard-stats .stat-item h2 {
+  font: 500 47px/1.1 "Cormorant Garamond", Georgia, serif;
+  color: #68102a; margin: 7px 0 0;
+}
+.estrade-dashboard .dashboard-content .dashboard-stats .stat-item p {
+  margin: 7px 0 0; color: #827570; font-size: 12px;
+}
+.estrade-dashboard .dashboard-content .command-feature {
+  display: flex; align-items: center; justify-content: space-between;
+  min-height: 205px; margin: 2px 0 20px;
+  padding: 28px 34px; background: #6b1027;
+  color: #fff8ee; border: 0; border-radius: 12px; box-shadow: none;
+  overflow: hidden; position: relative;
+}
+.estrade-dashboard .dashboard-content .command-feature::before {
+  content: ""; position: absolute; width: 430px; height: 430px; border: 1px solid #ffffff23;
+  border-radius: 50%; right: -70px; top: -165px; pointer-events: none;
+}
+.estrade-dashboard .dashboard-content .command-feature::after {
+  content: ""; position: absolute; width: 290px; height: 290px; border: 1px solid #ffffff20;
+  border-radius: 50%; right: 0; top: -96px; pointer-events: none;
+}
+.estrade-dashboard .dashboard-content .command-feature > * { position: relative; z-index: 1; }
+.estrade-dashboard .dashboard-content .command-feature .eyebrow { color: #f6c7c4; }
+.estrade-dashboard .dashboard-content .command-feature h2 {
+  color: #fff8ee; font: 500 clamp(32px, 3.2vw, 47px)/1.1 "Cormorant Garamond", Georgia, serif;
+  margin: 12px 0; max-width: 630px;
+}
+.estrade-dashboard .dashboard-content .command-feature p { color: #f1d5d6; font-size: 14px; }
+.estrade-dashboard .dashboard-content .command-feature .button.primary {
+  margin-top: 13px; background: #fff8ee; color: #6b1027; border-color: #fff8ee;
+  font-size: 13px; border-radius: 8px;
+}
+.estrade-dashboard .dashboard-content .command-feature .button.primary:hover { background: #f5dfd3; }
+.estrade-dashboard .dashboard-content .command-feature .empty-stage {
+  border-color: #ffffff35; background: #ffffff0a;
+}
+.estrade-dashboard .dashboard-content .command-feature .empty-stage span { color: #f7e8d4; }
+.estrade-dashboard .dashboard-content .command-feature .command-date {
+  background: #fff5ea; color: #760719; border: 0;
+}
+.estrade-dashboard .dashboard-content .command-feature .empty-orientation { font-size: 12px; }
+.estrade-dashboard .dashboard-content .dashboard-overview-grid {
+  grid-template-columns: minmax(0, 1.75fr) minmax(280px, 1fr);
+  gap: 16px; align-items: stretch; margin-top: 18px;
+}
+.estrade-dashboard .dashboard-content .upcoming-events,
+.estrade-dashboard .dashboard-content .event-readiness,
+.estrade-dashboard .dashboard-content .operations-panel,
+.estrade-dashboard .dashboard-content .estrade-committee-section {
+  background: #fffdf9; border: 1px solid var(--ed-line);
+  border-radius: 12px; box-shadow: none; min-width: 0;
+}
+.estrade-dashboard .dashboard-content .event-readiness {
+  border: 1px solid var(--ed-line); padding: 27px 24px;
+}
+.estrade-dashboard .dashboard-content .event-readiness h2,
+.estrade-dashboard .dashboard-content .section-title-row h2,
+.estrade-dashboard .dashboard-content .operations-panel h2,
+.estrade-dashboard .dashboard-content .estrade-committee-section h2 {
+  font: 500 clamp(26px, 2.35vw, 35px)/1.12 "Cormorant Garamond", Georgia, serif;
+  color: #5e1a30;
+}
+.estrade-dashboard .dashboard-content .event-readiness h4 { margin-top: 13px; }
+.estrade-dashboard .dashboard-content .readiness-score { margin: 25px 0 19px; }
+.estrade-dashboard .dashboard-content .readiness-score strong {
+  font: 500 55px/1 "Cormorant Garamond", Georgia, serif;
+}
+.estrade-dashboard .dashboard-content .progress-track { height: 8px; background: #f2e8e3; }
+.estrade-dashboard .dashboard-content .progress-fill { background: #760719; }
+.estrade-dashboard .dashboard-content .checklist-item { cursor: default; text-decoration: none; }
+.estrade-dashboard .dashboard-content .checklist-item.completed { text-decoration: none; color: #355d4c; }
+.estrade-dashboard .dashboard-content .upcoming-events { padding: 25px 25px 20px; }
+.estrade-dashboard .dashboard-content .section-title-row { margin-bottom: 15px; }
+.estrade-dashboard .dashboard-content .event-row { column-gap: 12px; }
+.estrade-dashboard .dashboard-content .event-date-box { border-radius: 8px; }
+.estrade-dashboard .dashboard-content .event-information h4 { color: #3d3030; }
+.estrade-dashboard .dashboard-content .event-information p { font-size: 12px; }
+.estrade-dashboard .dashboard-content .event-details { white-space: nowrap; }
+.estrade-dashboard .dashboard-content .withdrawal-alert {
+  border-radius: 10px; padding: 17px 21px; margin-bottom: 18px;
+  border-left: 3px solid #b76e33; background: #fff7ed;
+}
+.estrade-dashboard .dashboard-content .operations-panel { padding: 26px; }
+.estrade-dashboard .dashboard-content .operations-panel h3 {
+  font: 500 25px/1.25 "Cormorant Garamond", Georgia, serif;
+  color: #64122b;
+  margin-top: 21px;
+}
+.estrade-dashboard .dashboard-content .operations-panel .operations-row {
+  padding: 16px 0; border-bottom-color: #ebe2dc;
+}
+.estrade-dashboard .dashboard-content .operations-panel button,
+.estrade-dashboard .operations-dialog button {
+  background: #fff9f4; color: #760719; border: 1px solid #e2cfc8;
+  border-radius: 7px; font-size: 13px; padding: 9px 13px;
+}
+.estrade-dashboard .dashboard-content .operations-panel button:hover,
+.estrade-dashboard .operations-dialog button:hover { background: #f6e7df; }
+.estrade-dashboard .dashboard-content .operations-panel select,
+.estrade-dashboard .dashboard-content .operations-panel input,
+.estrade-dashboard .dashboard-content .operations-panel textarea {
+  background: #fffdf9; border: 1px solid #e0d4cd; border-radius: 8px;
+}
+.estrade-dashboard .dashboard-content .operations-panel label { font-size: 13px; color: #6a5055; }
+.estrade-dashboard .dashboard-content .operations-panel select:focus-visible,
+.estrade-dashboard .dashboard-content .operations-panel input:focus-visible,
+.estrade-dashboard .dashboard-content .operations-panel textarea:focus-visible,
+.estrade-dashboard button:focus-visible { outline: 3px solid #d6b17e; outline-offset: 2px; }
+.estrade-dashboard .estrade-committee-section { padding: 27px; margin-top: 22px; }
+.estrade-dashboard .estrade-committee-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 18px; }
+.estrade-dashboard .estrade-committee-card {
+  display: flex; align-items: center; gap: 17px; min-width: 0;
+  border: 1px solid #e8ded7; border-radius: 10px; padding: 19px; background: #fffcf8;
+}
+.estrade-dashboard .estrade-committee-monogram {
+  flex-shrink: 0; display: grid; place-items: center;
+  width: 50px; height: 50px; border-radius: 9px; color: #751629;
+  background: #f3e6df; font: 500 30px/1 "Cormorant Garamond", Georgia, serif;
+}
+.estrade-dashboard .estrade-committee-card h3 { font: 500 22px "Cormorant Garamond", Georgia, serif; color: #4e2730; margin: 0 0 4px; }
+.estrade-dashboard .estrade-committee-card p { font-size: 12px; margin: 0; }
+.estrade-dashboard .estrade-pill {
+  font: 600 10px Arial, sans-serif; letter-spacing: .03em;
+  color: #875b60; background: #faefea; border: 1px solid #f0ded7;
+  border-radius: 100px; padding: 7px 10px; white-space: nowrap; margin-left: auto;
+}
+.estrade-dashboard .estrade-pill.can-manage { color: #36684f; background: #ebf5ee; border-color: #d7e9db; }
+.estrade-dashboard .estrade-preview-banner {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 12px;
+  padding: 12px 16px; margin: 0 0 24px;
+  background: #fef1dd; border: 1px solid #edd7b7; border-radius: 8px;
+  color: #64411f; font-size: 12px;
+}
+.estrade-dashboard .estrade-preview-banner strong { font: 700 10px Arial, sans-serif; letter-spacing: .08em; }
+.estrade-dashboard .estrade-live-indicator.is-preview i { background: #c88735; box-shadow: 0 0 0 4px #c887351c; }
+.estrade-dashboard .estrade-preview-inline { font-size: 13px !important; color: #865b46 !important; }
+.estrade-dashboard .estrade-preview-workspace-heading { display: flex; justify-content: space-between; align-items: center; }
+.estrade-dashboard .estrade-preview-workspace h2 { margin: 14px 0; }
+.estrade-dashboard .estrade-preview-info-list { display: grid; gap: 13px; margin-top: 24px; }
+.estrade-dashboard .estrade-preview-info-row { display: flex; align-items: center; gap: 12px; color: #5e4e4e; font-size: 13px; }
+.estrade-dashboard .estrade-preview-info-row svg { color: #8d2441; flex-shrink: 0; }
+.estrade-dashboard .estrade-preview-capability {
+  display: flex; gap: 18px; background: #f8f0e9; padding: 23px;
+  margin-top: 28px; border-radius: 10px; border: 1px solid #ecddd1;
+}
+.estrade-dashboard .estrade-preview-capability svg { flex-shrink: 0; color: #760719; }
+.estrade-dashboard .estrade-preview-capability h3 { margin: 0 0 6px !important; }
+.estrade-dashboard .estrade-preview-capability p { font-size: 13px; margin: 0 0 10px; }
+.estrade-dashboard .estrade-preview-capability small { font-size: 12px; color: #8d6464; }
+/* Balanced responsive composition. */
+@media (max-width: 1250px) {
+  .estrade-dashboard .dashboard-content .dashboard-overview-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 1060px) {
+  .estrade-dashboard .dashboard-sidebar { width: 205px; min-width: 205px; }
+  .estrade-dashboard .dashboard-content .dashboard-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .estrade-dashboard .dashboard-topbar .faculty-name { display: none; }
+  .estrade-dashboard .estrade-committee-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+  .estrade-dashboard .dashboard-sidebar { width: 66px; min-width: 66px; height: 100dvh; min-height: 100dvh; }
+  .estrade-dashboard .sidebar-brand { padding: 23px 3px 23px; text-align: center; }
+  .estrade-dashboard .sidebar-brand h1 { font-size: 21px; letter-spacing: -.03em; }
+  .estrade-dashboard .estrade-sidebar-kicker,
+  .estrade-dashboard .sidebar-brand p,
+  .estrade-dashboard .estrade-sidebar-divider,
+  .estrade-dashboard .sidebar-link span,
+  .estrade-dashboard .estrade-nav-arrow,
+  .estrade-dashboard .estrade-sidebar-footnote,
+  .estrade-dashboard .estrade-sidebar-spacer,
+  .estrade-dashboard .sidebar-bottom,
+  .estrade-dashboard .estrade-preview-sidebar-foot { display: none; }
+  .estrade-dashboard .sidebar-navigation { padding: 3px 6px; gap: 8px; }
+  .estrade-dashboard .sidebar-link { justify-content: center; padding: 12px 0; }
+  .estrade-dashboard .sidebar-logout { margin: auto 2px 10px; }
+  .estrade-dashboard .estrade-logout-btn { padding: 10px; justify-content: center; }
+  .estrade-dashboard .dashboard-topbar { padding: 0 14px; gap: 8px; height: 63px; }
+  .estrade-dashboard .dashboard-search { width: 100%; max-width: 180px; }
+  .estrade-dashboard .dashboard-main .dashboard-content { padding: 20px 15px 50px; }
+  .estrade-dashboard .estrade-overview-intro { padding: 22px 18px; align-items: flex-start; }
+  .estrade-dashboard .dashboard-content .command-feature { padding: 24px; }
+  .estrade-dashboard .dashboard-content .command-feature::before,
+  .estrade-dashboard .dashboard-content .command-feature::after { display: none; }
+  .estrade-dashboard .dashboard-content .dashboard-stats .stat-item { padding: 16px 12px; }
+  .estrade-dashboard .dashboard-content .dashboard-stats .stat-item h2 { font-size: 35px; }
+  .estrade-dashboard .estrade-stat-icon { padding: 6px; }
+  .estrade-dashboard .estrade-stat-label { font-size: 9px; }
+  .estrade-dashboard .dashboard-content .event-readiness { padding: 20px; }
+  .estrade-dashboard .dashboard-content .upcoming-events { padding: 20px 15px; }
+}
+@media (max-width: 430px) {
+  .estrade-dashboard .dashboard-content .dashboard-stats { gap: 9px; }
+  .estrade-dashboard .estrade-stat-upper { gap: 5px; }
+  .estrade-dashboard .estrade-stat-icon { display: none; }
+  .estrade-dashboard .faculty-profile { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .estrade-dashboard *, .estrade-dashboard *::before, .estrade-dashboard *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

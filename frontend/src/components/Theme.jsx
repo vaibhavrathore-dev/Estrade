@@ -3,9 +3,11 @@ const ThemeContext = createContext(null);
 export function ThemeProvider({ children }) {
   const [lit, setLit] = useState(() => {
     try {
-      return localStorage.getItem("estrade-light") === "on";
+      // Default new visitors to Estrade's elegant light theme.
+      // Anyone who explicitly selected dark mode keeps that choice.
+      return localStorage.getItem("estrade-light") !== "off";
     } catch {
-      return false;
+      return true;
     }
   });
   useLayoutEffect(() => {

@@ -57,23 +57,43 @@ const handleSignup = async (e) => {
   }
 
   setMessage("Creating your account...");
-
   setLoading(true);
+
   try {
+    // Step 1: Register the user
     await authAPI.register({
       full_name: formData.name,
       email: formData.email,
       password: formData.password,
     });
 
-    navigate("/login", {state: {message: "Account created. Sign in to open your workspace."}});
+    // Step 2: Automatically log in
+    try {
+      const result = await authAPI.login({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      authAPI.setToken(result.access_token);
+
+      // Step 3: Open Faculty Dashboard
+      navigate("/dashboard", { replace: true });
+
+    } catch {
+      navigate("/login", {
+        replace: true,
+        state: {
+          message: "Account created successfully. Please sign in.",
+        },
+      });
+    }
+
   } catch (error) {
     setMessage(error.message);
   } finally {
     setLoading(false);
   }
 };
-
   return (
     <div className="estrade-login">
 

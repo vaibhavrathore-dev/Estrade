@@ -1,77 +1,45 @@
-import {
-  House,
-  CalendarDays,
-  Users,
-  SquareCheck,
-  Image,
-  Settings
-} from "lucide-react";
+import { House, CalendarDays, UsersRound, Building2, Images, Award, Settings2, ArrowUpRight } from "lucide-react";
 import LogoutButton from "./LogoutButton";
 
-function Sidebar({ activePage = "Overview", onNavigate, role = "Campus" }) {
+const navigation = [
+  { name: "Overview", icon: House },
+  { name: "Events", icon: CalendarDays },
+  { name: "Committees", icon: Building2 },
+  { name: "Coordinators", icon: UsersRound },
+  { name: "Media", icon: Images },
+  { name: "Certificates", icon: Award },
+  { name: "Settings", icon: Settings2 },
+];
 
-  const menuItems = [
-    { name: "Overview", icon: House },
-    { name: "Events", icon: CalendarDays },
-    { name: "Coordinators", icon: Users },
-    { name: "Tasks", icon: SquareCheck },
-    { name: "Media", icon: Image },
-    { name: "Certificates", icon: SquareCheck },
-    { name: "Settings", icon: Settings }
-  ];
-
+export default function Sidebar({ activePage = "Overview", onNavigate, role = "Campus", previewMode = false }) {
   return (
-    <aside className="dashboard-sidebar">
-
-      {/* Estrade Logo */}
-
+    <aside className="dashboard-sidebar" aria-label="Workspace navigation">
       <div className="sidebar-brand">
-        <h1>estrade</h1>
-        <p>{role} workspace</p>
+        <span className="estrade-sidebar-kicker">THE EVENT STUDIO</span>
+        <h1>estrade<span>.</span></h1>
+        <p>{role || "Campus"} workspace</p>
       </div>
-
-      {/* Navigation Menu */}
-
-      <nav className="sidebar-navigation">
-
-        {menuItems.map((item) => {
-
-          const Icon = item.icon;
-
-          return (
-            <button
-              key={item.name}
-              type="button"
-              className={`sidebar-link ${
-                activePage === item.name ? "selected" : ""
-              }`}
-              aria-current={activePage === item.name ? "page" : undefined}
-              onClick={() => onNavigate?.(item.name)}
-            >
-              <Icon size={20} strokeWidth={1.6} />
-
-              <span>{item.name}</span>
-            </button>
-          );
-
-        })}
-
+      <div className="estrade-sidebar-divider">WORKSPACE</div>
+      <nav className="sidebar-navigation" aria-label="Dashboard pages">
+        {navigation.map(({ name, icon: Icon }) => (
+          <button
+            key={name}
+            type="button"
+            title={name}
+            className={`sidebar-link ${activePage === name ? "selected" : ""}`}
+            aria-current={activePage === name ? "page" : undefined}
+            onClick={() => onNavigate?.(name)}
+          >
+            <Icon size={19} strokeWidth={1.65} aria-hidden="true" />
+            <span>{name}</span>
+            {activePage === name && <ArrowUpRight size={14} className="estrade-nav-arrow" aria-hidden="true" />}
+          </button>
+        ))}
       </nav>
-
-      {/* LOGOUT SECTION */}
-
-      <div className="sidebar-logout">
-        <LogoutButton />
-      </div>
-
-      {/* Sidebar Footer */}
-
-      <div className="sidebar-bottom">
-        Behind every great event.
-      </div>
-
+      <div className="estrade-sidebar-spacer" />
+      <div className="estrade-sidebar-footnote">Beautiful events.<br/>Better organized.</div>
+      {previewMode ? <div className="estrade-preview-sidebar-foot">DESIGN PREVIEW · SAMPLE DATA</div> : <div className="sidebar-logout"><LogoutButton /></div>}
+      <div className="sidebar-bottom">Behind every great event.</div>
     </aside>
   );
 }
-
-export default Sidebar;

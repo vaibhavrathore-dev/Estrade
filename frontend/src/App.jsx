@@ -14,6 +14,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        {import.meta.env.DEV && <Route path="/dashboard-preview" element={<Dashboard previewMode />} />}
         {/* Reuse the real authenticated event form, rather than the old preview-only page. */}
         <Route path="/create-event" element={<ProtectedRoute><Dashboard initialCreateEvent /></ProtectedRoute>} />
         <Route path="*" element={<Home />} />

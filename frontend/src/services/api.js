@@ -61,7 +61,7 @@ export async function apiRequest(path, options = {}) {
   }
 }
 export const authAPI = {
-  setToken: (value) => { token = value; sessionStorage.removeItem("estrade_token"); },
+  setToken: (value) => { token = value; try { sessionStorage.removeItem("estrade_token"); } catch { /* Storage is optional; tokens remain in memory. */ } },
   me: () => apiRequest("/api/v1/auth/me"),
   register: (body) => apiRequest("/api/v1/auth/register", {method: "POST", body: JSON.stringify(body)}),
   login: (body) => apiRequest("/api/v1/auth/login", {method: "POST", body: JSON.stringify(body)}),

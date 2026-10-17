@@ -1357,4 +1357,5 @@
   .ecosystem-connections circle {
     animation: none !important;
   }
-}
+}.login-form > label { display:grid; gap:8px; margin-bottom:16px; }
+.login-form > label > input { padding:12px; border:1px solid #b7a9a1; border-radius:6px; font:inherit; }

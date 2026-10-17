@@ -174,7 +174,7 @@ const handleLogin = async (e) => {
                   Password
                 </label>
 
-                <span className="password-help">Need help? Contact your administrator.</span>
+                <Link to="/forgot-password" className="password-help">Forgot password?</Link>
 
               </div>
 
@@ -226,6 +226,7 @@ const handleLogin = async (e) => {
 
           </form>
 
+          <p><Link to="/verify-email">Verify email or resend activation code</Link></p>
           {/* SIGNUP */}
 
           <div className="login-signup">

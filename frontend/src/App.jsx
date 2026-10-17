@@ -1,3 +1,5 @@
+import VerifyCertificate from "./pages/VerifyCertificate";
+import AccountRecovery from "./pages/AccountRecovery";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { ThemeProvider } from "./components/Theme";
@@ -11,7 +13,10 @@ function App() {
     <ThemeProvider><BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/verify-certificate/:code" element={<VerifyCertificate/>}/>
         <Route path="/login" element={<Login />} />
+        <Route path="/verify-email" element={<AccountRecovery verification />} />
+        <Route path="/forgot-password" element={<AccountRecovery />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         {import.meta.env.DEV && <Route path="/dashboard-preview" element={<Dashboard previewMode />} />}

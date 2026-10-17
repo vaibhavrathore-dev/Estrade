@@ -27,3 +27,36 @@
 }
 
 .operations-message button { margin-left: 12px; text-decoration: underline; }
+
+.estrade-dashboard .operation-button { background:#751d32; color:white; border:1px solid transparent; border-radius:8px; padding:10px 15px; margin:5px 8px 5px 0; font:inherit; cursor:pointer; }
+.estrade-dashboard .operation-positive { background:#18794e; }
+.estrade-dashboard .operation-info { background:#2563a6; }
+.estrade-dashboard .operation-warning { background:#87550c; }
+.estrade-dashboard .operation-danger { background:#b42332; }
+.estrade-dashboard button:disabled { background:#e1e1e1; color:#555; border-color:#ccc; cursor:not-allowed; opacity:1; }
+.estrade-dashboard button:focus-visible, .estrade-dashboard input:focus-visible, .estrade-dashboard select:focus-visible { outline:3px solid #2563a6; outline-offset:3px; }
+.estrade-dashboard .operation-button:not(:disabled):hover { filter:brightness(.9); }
+.ticket-code { background:white; color:#222; padding:20px; width:fit-content; max-width:100%; margin:12px 0; }
+.ticket-code svg { max-width:100%; height:auto; }
+.operations-panel video { width:100%; max-width:440px; }
+.operations-panel textarea { max-width:100%; }
+/* Operational semantics override the inherited decorative dashboard button skin. */
+.estrade-dashboard .dashboard-content .operations-panel button.operation-button,
+.estrade-dashboard .dashboard-content .operations-panel button.operation-button:hover {
+  background:var(--operation-color, #751d32); color:#fff; border-color:transparent;
+}
+.estrade-dashboard .dashboard-content .operations-panel button.operation-positive { --operation-color:#18794e; }
+.estrade-dashboard .dashboard-content .operations-panel button.operation-info { --operation-color:#2563a6; }
+.estrade-dashboard .dashboard-content .operations-panel button.operation-warning { --operation-color:#87550c; }
+.estrade-dashboard .dashboard-content .operations-panel button.operation-danger { --operation-color:#b42332; }
+.estrade-dashboard .dashboard-content .operations-panel button:disabled,
+.estrade-dashboard .dashboard-content .operations-panel button:disabled:hover,
+.estrade-dashboard .operations-dialog button:disabled { background:#e1e1e1; color:#555; border-color:#ccc; opacity:1; filter:none; cursor:not-allowed; }
+.estrade-dashboard .dashboard-content .operations-panel button:focus-visible { outline:3px solid #2563a6; outline-offset:3px; }
+.estrade-dashboard .dashboard-content .operations-row > a { display:inline-block; margin:8px; text-decoration:underline; }
+.estrade-dashboard .mobile-workspace-select { display:none; }
+@media(max-width:800px) {
+  .estrade-dashboard .mobile-workspace-select { display:grid; gap:6px; color:#fff; padding:10px 0; }
+  .estrade-dashboard .mobile-workspace-select select { max-width:100%; min-width:0; padding:8px; background:#fff9f2; color:#570713; border-radius:6px; }
+}
+.estrade-dashboard .dashboard-content .operations-panel input[type="checkbox"] { width:auto; justify-self:start; }

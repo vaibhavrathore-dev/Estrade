@@ -60,33 +60,11 @@ const handleSignup = async (e) => {
   setLoading(true);
 
   try {
-    // Step 1: Register the user
-    await authAPI.register({
-      full_name: formData.name,
-      email: formData.email,
-      password: formData.password,
+    const result = await authAPI.register({
+      full_name: formData.name, email: formData.email, password: formData.password,
     });
-
-    // Step 2: Automatically log in
-    try {
-      const result = await authAPI.login({
-        email: formData.email,
-        password: formData.password,
-      });
-
-      authAPI.setToken(result.access_token);
-
-      // Step 3: Open Faculty Dashboard
-      navigate("/dashboard", { replace: true });
-
-    } catch {
-      navigate("/login", {
-        replace: true,
-        state: {
-          message: "Account created successfully. Please sign in.",
-        },
-      });
-    }
+    navigate("/verify-email", {replace:true, state:{email:formData.email,
+      message:result.delivery_status === "sent" ? "Account created. Check your email for a verification code." : "Account created but email delivery is unavailable. Your account is not active. Contact the administrator or retry sending a code."}});
 
   } catch (error) {
     setMessage(error.message);

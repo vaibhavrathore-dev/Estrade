@@ -1,3 +1,6 @@
+import Button from "../components/Button";
+import CommitteeWorkspace, { MyAssignments } from "../components/CommitteeWorkspace";
+import { MyRegistrations } from "../components/RegistrationWorkspace";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
@@ -103,7 +106,8 @@ export default function Dashboard({ initialCreateEvent = false, previewMode = fa
   }
   const events = data?.events || [];
   const filtered = events.filter(
-    (e) => !committeeFilter || e.committee_id === committeeFilter,
+    (e) => (!committeeFilter || e.committee_id === committeeFilter) &&
+      (!["Registrations", "QR Attendance", "Participation Approval", "Certificate Studio", "Coordinators", "Media"].includes(activePage) || data?.committees.some(c => c.id === e.committee_id && c.can_manage)),
   );
   const selectedEvent = filtered.find((e) => e.id === selected) || filtered[0];
   const rows = filtered
@@ -148,6 +152,7 @@ export default function Dashboard({ initialCreateEvent = false, previewMode = fa
         }}
         role={data?.user.user_type}
         previewMode={previewMode}
+        canManage={canCreate || previewMode}
       />
       <div className="dashboard-main">
         <Topbar
@@ -162,7 +167,7 @@ export default function Dashboard({ initialCreateEvent = false, previewMode = fa
           <div className="command-heading estrade-command-heading">
             <div>
               <span className="eyebrow">
-                ESTRADE / FACULTY WORKSPACE / {activePage.toUpperCase()}
+                ESTRADE / {data?.user.user_type?.toUpperCase() || "CAMPUS"} WORKSPACE / {activePage.toUpperCase()}
               </span>
               <h1>
                 {activePage === "Overview" ? (
@@ -333,7 +338,10 @@ export default function Dashboard({ initialCreateEvent = false, previewMode = fa
                   <EventReadiness events={events} summary={data.summary} />
                 </div>
               )}
-              {activePage === "Committees" && (
+              {activePage === "My Registrations" && !previewMode && <MyRegistrations/>}
+              {activePage === "My Assignments" && !previewMode && <MyAssignments/>}
+              {activePage === "Committees" && !previewMode && <CommitteeWorkspace committees={data.committees} user={data.user} onChanged={refresh}/>}
+              {activePage === "Committees" && previewMode && (
                 <section className="estrade-committee-section">
                   <div className="section-title-row"><div><span className="eyebrow">CAMPUS ORGANIZATION</span><h2>Committee directory</h2></div></div>
                   {data.committees.length === 0 ? <p>No committees are visible to your account yet.</p> : (
@@ -363,15 +371,16 @@ export default function Dashboard({ initialCreateEvent = false, previewMode = fa
                   {data.certificates.map((c) => (
                     <div className="operations-row" key={c.id}>
                       {c.event_title} ·{" "}
-                      {new Date(c.event_date).toLocaleDateString()}
-                      <button onClick={() => downloadCertificate(c.id)}>
+                      {new Date(c.event_date).toLocaleDateString()} · Email: {c.delivery_status || "Unknown"}
+                      {c.verification_code && <a href={`/verify-certificate/${c.verification_code}`} target="_blank" rel="noreferrer">Public verification</a>}
+                      <Button variant="info" onClick={() => downloadCertificate(c.id)}>
                         Download my certificate
-                      </button>
+                      </Button>
                     </div>
                   ))}
                 </section>
               )}
-              {!["Overview", "Settings", "Certificates", "Committees"].includes(activePage) && (
+              {!["Overview", "Settings", "Certificates", "Committees", "My Registrations", "My Assignments"].includes(activePage) && (
                 <>
                   <section className="operations-panel">
                     <h2>{activePage}</h2>

@@ -51,58 +51,21 @@ async function noOverflow(page) {
     ),
   ).toBe(true);
 }
-test("lamp, keyboard, persistence, navigation, lifecycle and mobile menu", async ({
-  page,
-}) => {
+test("curtain opening, keyboard replay, session persistence and mobile navigation", async ({page}) => {
   const errors = [];
-  page.on("pageerror", (e) => errors.push(e.message));
-  await page.goto("/");
-  await expect(page.locator("html")).toHaveAttribute("data-light", "off");
-  await expect(page.locator(".lamp-canvas")).toHaveAttribute(
-    "data-ready",
-    "true",
-  );
-  await page.getByRole("button", { name: "Illuminate Estrade" }).click();
-  await expect(page.locator("html")).toHaveAttribute("data-light", "on");
-  await page.waitForTimeout(1400);
-  await page.screenshot({
-    path: "artifacts/landing-light-1440.png",
-    fullPage: true,
-          animations: "disabled",
-  });
+  page.on('pageerror', e => errors.push(e.message));
+  await page.goto('/');
+  await page.getByRole('button', {name:'Replay opening'}).waitFor();
+  await page.getByRole('button', {name:'Replay opening'}).focus();
+  await page.keyboard.press('Enter');
+  await page.getByRole('button', {name:'Skip intro'}).click();
+  await expect(page.locator('.estrade-opening')).toHaveCount(0);
   await page.reload();
-  await expect(page.locator("html")).toHaveAttribute("data-light", "on");
-  await page.getByRole("button", { name: "Turn lamp off" }).click();
-  await expect(page.locator("html")).toHaveAttribute("data-light", "off");
-  await page.getByRole("button", { name: "Illuminate Estrade" }).focus();
-  await page.keyboard.press("Enter");
-  await expect(page.locator("html")).toHaveAttribute("data-light", "on");
-  await page.getByRole("tab", { name: "04 Schedule" }).click();
-  await expect(page.getByRole("tabpanel")).toContainText(
-    "Conflicting confirmed bookings",
-  );
-  await page.getByRole("tab", { name: "04 Schedule" }).press("ArrowDown");
-  await expect(page.getByRole("tab", { name: "05 Execute" })).toHaveAttribute(
-    "aria-selected",
-    "true",
-  );
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/");
-  await page.getByRole("button", { name: "Open navigation" }).click();
-  await page
-    .getByRole("navigation")
-    .getByRole("link", { name: "Features", exact: true })
-    .click();
-  await expect(
-    page.getByRole("button", { name: "Open navigation" }),
-  ).toHaveAttribute("aria-expanded", "false");
-  await page.getByRole("button", { name: "Open navigation" }).click();
-  await page
-    .getByRole("navigation")
-    .getByRole("link", { name: "Login", exact: true })
-    .click();
+  await expect(page.getByRole('button', {name:'Replay opening'})).toBeVisible();
+  await page.setViewportSize({width:390,height:844});
+  await page.getByRole('button', {name:'Open navigation'}).click();
+  await page.getByRole('navigation').getByRole('link', {name:'Login',exact:true}).click();
   await expect(page).toHaveURL(/login/);
-  await expect(page.locator("html")).toHaveAttribute("data-light", "on");
   expect(errors).toEqual([]);
 });
 for (const width of widths) {
@@ -111,15 +74,12 @@ for (const width of widths) {
     for (const path of ["/", "/login", "/signup"]) {
       await page.goto(path);
       if (path === "/")
-        await expect(page.locator(".lamp-canvas")).toHaveAttribute(
-          "data-ready",
-          "true",
-        );
+        await expect(page.getByRole("button", {name:"Replay opening"})).toBeVisible();
       await noOverflow(page);
       if (width === 390 || width === 1440) await page.waitForTimeout(1400);
       if (width === 390 || width === 1440)
         await page.screenshot({
-          path: `artifacts/${path === "/" ? "landing-dark" : path.slice(1)}-${width}.png`,
+          path: `/tmp/estrade-recovery/${path === "/" ? "landing-dark" : path.slice(1)}-${width}.png`,
           fullPage: true,
           animations: "disabled",
         });
@@ -136,7 +96,7 @@ for (const width of widths) {
       ).toBeVisible();
     if (width === 390 || width === 1440)
       await page.screenshot({
-        path: `artifacts/dashboard-empty-${width}.png`,
+        path: `/tmp/estrade-recovery/dashboard-empty-${width}.png`,
         fullPage: true,
           animations: "disabled",
       });
@@ -172,6 +132,9 @@ test("auth submission, validation, logout, and protected routing (isolated API f
   await page
     .getByRole("button", { name: "Create Account", exact: true })
     .click();
+  await expect(page).toHaveURL(/verify-email/);
+  await page.getByLabel("Six-digit code").fill("123456");
+  await page.getByRole("button", { name: "Verify code", exact: true }).click();
   await expect(page).toHaveURL(/login/);
   await page.getByLabel("Email Address").fill("browser@example.invalid");
   await page.getByLabel("Password", { exact: true }).fill("test-only-password");
@@ -212,13 +175,13 @@ test("featured event, create submission, permissions, API retry", async ({
     "Isolated browser fixture",
   );
   await page.screenshot({
-    path: "artifacts/dashboard-featured.png",
+    path: "/tmp/estrade-recovery/dashboard-featured.png",
     fullPage: true,
           animations: "disabled",
   });
   await page.getByRole("button", { name: "Open event workspace" }).click();
   await expect(
-    page.getByText("Coordinators and withdrawal history"),
+    page.getByText("Registration → QR attendance → Participation → Certificate"),
   ).toBeVisible();
   await page.getByRole("button", { name: "Create Event", exact: true }).click();
   const dialog = page.getByRole("dialog");
@@ -251,7 +214,7 @@ test("featured event, create submission, permissions, API retry", async ({
   await page.getByRole("button", { name: "Retry" }).click();
   await expect(page.getByText("The stage is ready.")).toBeVisible();
 });
-test("reduced motion and no WebGL fallback", async ({ page }) => {
+test("reduced motion curtain and navigation without WebGL", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript(() => {
     HTMLCanvasElement.prototype.getContext = function () {
@@ -259,9 +222,8 @@ test("reduced motion and no WebGL fallback", async ({ page }) => {
     };
   });
   await page.goto("/");
-  await expect(page.locator(".lamp-fallback")).toBeVisible();
-  await page.getByRole("button", { name: "Turn lamp on" }).click();
-  await expect(page.locator("html")).toHaveAttribute("data-light", "on");
+  await expect(page.getByRole("button", {name:"Replay opening"})).toBeVisible();
+  await expect(page.locator(".estrade-opening")).toHaveCount(0);
   await page
     .getByRole("navigation")
     .getByRole("link", { name: "Login", exact: true })
@@ -280,17 +242,14 @@ test("illuminated theme responsive layouts and theme controls", async ({
       await page.goto(path);
       await expect(page.locator("html")).toHaveAttribute("data-light", "on");
       if (path === "/")
-        await expect(page.locator(".lamp-canvas")).toHaveAttribute(
-          "data-ready",
-          "true",
-        );
+        await expect(page.getByRole("button", {name:"Replay opening"})).toBeVisible();
       if (path === "/dashboard")
         await expect(page.getByText("The stage is ready.")).toBeVisible();
       await noOverflow(page);
       if (width === 390 || width === 1440) await page.waitForTimeout(1400);
       if (width === 390 || width === 1440)
         await page.screenshot({
-          path: `artifacts/${path === "/" ? "landing" : path.slice(1)}-light-${width}.png`,
+          path: `/tmp/estrade-recovery/${path === "/" ? "landing" : path.slice(1)}-light-${width}.png`,
           fullPage: true,
           animations: "disabled",
         });
@@ -312,8 +271,7 @@ test("login API failure and inaccessible storage remain usable", async ({
     };
   });
   await page.goto("/");
-  await page.getByRole("button", { name: "Illuminate Estrade" }).click();
-  await expect(page.locator("html")).toHaveAttribute("data-light", "on");
+  await expect(page.getByRole("button", {name:"Replay opening"})).toBeVisible();
   await page
     .getByRole("navigation")
     .getByRole("link", { name: "Login", exact: true })

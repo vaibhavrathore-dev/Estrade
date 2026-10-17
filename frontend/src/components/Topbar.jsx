@@ -1,14 +1,15 @@
+import ThemeToggle from "./ThemeToggle";
 import { useState } from "react";
 
-import {
-  Search,
-  Bell,
-  Plus,
-  ChevronDown
-} from "lucide-react";
+import { Search, Bell, Plus, ChevronDown } from "lucide-react";
 
-function Topbar({ onSearchChange, onCreateEvent, user, pending = 0 }) {
-
+function Topbar({
+  onSearchChange,
+  onCreateEvent,
+  user,
+  pending = 0,
+  canCreate = false,
+}) {
   const [showNotifications, setShowNotifications] = useState(false);
 
   const [search, setSearch] = useState("");
@@ -23,99 +24,78 @@ function Topbar({ onSearchChange, onCreateEvent, user, pending = 0 }) {
 
   return (
     <header className="dashboard-topbar">
-
       {/* SEARCH BAR */}
 
       <div className="dashboard-search">
-
         <Search size={19} strokeWidth={1.7} />
 
         <input
           type="text"
-          placeholder="Search events, tasks or people"
+          placeholder="Search events"
+          aria-label="Search events"
           value={search}
           onChange={handleSearch}
         />
-
       </div>
-
 
       {/* RIGHT SIDE ACTIONS */}
 
       <div className="dashboard-top-actions">
+        <ThemeToggle />
 
         {/* NOTIFICATIONS */}
 
         <div className="notification-wrapper">
-
           <button
             type="button"
             className="notification-button"
             aria-label="Notifications"
-            onClick={() =>
-              setShowNotifications(!showNotifications)
-            }
+            onClick={() => setShowNotifications(!showNotifications)}
           >
-
             <Bell size={21} strokeWidth={1.7} />
 
             {pending > 0 && <span className="notification-dot"></span>}
-
           </button>
-
 
           {/* ANNOUNCEMENTS */}
 
           {showNotifications && (
-
             <div className="notification-panel">
-
               <h3>Announcements</h3>
 
               <p>{pending} pending withdrawal requests.</p>
-
             </div>
-
           )}
-
         </div>
-
 
         {/* FACULTY PROFILE */}
 
         <div className="faculty-profile">
-
           <span className="faculty-avatar">
             {user?.full_name?.slice(0, 2).toUpperCase()}
           </span>
 
-          <span className="faculty-name">
-            {user?.full_name}
-          </span>
+          <span className="faculty-name">{user?.full_name}</span>
 
           <ChevronDown size={16} />
-
         </div>
-
 
         {/* CREATE EVENT BUTTON */}
 
-        <button
-          type="button"
-          className="create-event-button"
-          aria-label="Create Event"
-          aria-haspopup="dialog"
-          onClick={() => onCreateEvent?.()}
-        >
+        {canCreate && (
+          <button
+            type="button"
+            className="create-event-button"
+            aria-label="Create Event"
+            aria-haspopup="dialog"
+            onClick={() => onCreateEvent?.()}
+          >
+            <Plus size={20} strokeWidth={1.7} />
 
-          <Plus size={20} strokeWidth={1.7} />
-
-          <span>Create Event</span>
-
-        </button>
-
+            <span>Create Event</span>
+          </button>
+        )}
       </div>
-
     </header>
   );
 }

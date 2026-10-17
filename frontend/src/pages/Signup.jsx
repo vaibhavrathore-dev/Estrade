@@ -1,3 +1,4 @@
+import ThemeToggle from "../components/ThemeToggle";
 import { authAPI } from "../services/api";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -118,10 +119,10 @@ const handleSignup = async (e) => {
 
         <div className="login-form-wrapper">
 
-          <Link to="/" className="login-back-link">
+          <div className="auth-toolbar"><Link to="/" className="login-back-link">
             <ArrowLeft size={17} />
             Back to Home
-          </Link>
+          </Link><ThemeToggle/></div>
 
           <div className="login-heading">
 
@@ -286,7 +287,7 @@ const handleSignup = async (e) => {
             {/* CREATE ACCOUNT */}
 
             <button type="submit" disabled={loading} className="login-submit">
-              Create Account
+              {loading ? "Creating account…" : "Create Account"}
               <ArrowRight size={19} />
             </button>
 

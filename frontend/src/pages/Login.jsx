@@ -1,3 +1,4 @@
+import ThemeToggle from "../components/ThemeToggle";
 import { useState } from "react";
 import LoginEcosystem from "../components/LoginEcosystem";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -111,10 +112,10 @@ const handleLogin = async (e) => {
 
         <div className="login-form-wrapper">
 
-          <Link to="/" className="login-back-link">
+          <div className="auth-toolbar"><Link to="/" className="login-back-link">
             <ArrowLeft size={17} />
             Back to Home
-          </Link>
+          </Link><ThemeToggle/></div>
 
           <div className="login-heading">
 
@@ -173,9 +174,7 @@ const handleLogin = async (e) => {
                   Password
                 </label>
 
-                <Link to="/forgot-password" onClick={e => {e.preventDefault(); setMessage("Password reset is not available yet. Contact your event administrator.");}}>
-                  Forgot Password?
-                </Link>
+                <span className="password-help">Need help? Contact your administrator.</span>
 
               </div>
 
@@ -215,7 +214,7 @@ const handleLogin = async (e) => {
             {/* SIGN IN BUTTON */}
 
             <button type="submit" disabled={loading} className="login-submit">
-              Sign In
+              {loading ? "Signing in…" : "Sign In"}
               <ArrowRight size={19} />
             </button>
 

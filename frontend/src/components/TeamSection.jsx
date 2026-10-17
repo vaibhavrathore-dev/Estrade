@@ -9,8 +9,8 @@ const teamMembers = [
     linkedin: "https://www.linkedin.com/in/rupinder-singh-8b8b38380/?isSelfProfile=true"
   },
   {
-    name: "Vaibhav Rathore",
-    role: "Backend Developer",
+    name: "Vaibhav Singh Rathore",
+    role: "Team Leader · Backend Developer",
     initials: "VR",
      image: "/images/team/fastapi.png",
     linkedin: "https://www.linkedin.com/in/vaibhavsrathore"

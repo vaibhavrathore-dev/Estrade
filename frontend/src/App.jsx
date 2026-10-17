@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { ThemeProvider } from "./components/Theme";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
@@ -7,7 +8,7 @@ import Signup from "./pages/Signup";
 
 function App() {
   return (
-    <BrowserRouter>
+    <ThemeProvider><BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -17,7 +18,7 @@ function App() {
         <Route path="/create-event" element={<ProtectedRoute><Dashboard initialCreateEvent /></ProtectedRoute>} />
         <Route path="*" element={<Home />} />
       </Routes>
-    </BrowserRouter>
+    </BrowserRouter></ThemeProvider>
   );
 }
 

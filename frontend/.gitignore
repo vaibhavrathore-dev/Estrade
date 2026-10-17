@@ -7,3 +7,8 @@ dist/
 *.log
 .DS_Store
 Thumbs.db
+
+# Local browser validation output
+artifacts/
+test-results/
+playwright-report/

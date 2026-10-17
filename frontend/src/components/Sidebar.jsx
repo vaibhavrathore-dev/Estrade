@@ -45,6 +45,7 @@ function Sidebar({ activePage = "Overview", onNavigate, role = "Campus" }) {
               className={`sidebar-link ${
                 activePage === item.name ? "selected" : ""
               }`}
+              aria-current={activePage === item.name ? "page" : undefined}
               onClick={() => onNavigate?.(item.name)}
             >
               <Icon size={20} strokeWidth={1.6} />

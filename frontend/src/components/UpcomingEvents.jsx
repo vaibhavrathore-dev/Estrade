@@ -100,7 +100,7 @@ function UpcomingEvents({ searchQuery = "", onViewEvent, events = [], title = "U
         {filteredEvents.length === 0 && (
 
           <p className="no-events">
-            No matching events found.
+            {searchQuery ? "No events match your search. Try another title." : "No events to show here yet. Published events and your committee’s events will appear when available."}
           </p>
 
         )}

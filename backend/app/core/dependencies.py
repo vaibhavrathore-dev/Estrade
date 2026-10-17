@@ -31,7 +31,7 @@ def get_current_user(
         payload = jwt.decode(
             credentials.credentials,
             settings.JWT_SECRET_KEY,
-            algorithms=["HS256"],
+            algorithms=[settings.JWT_ALGORITHM],
             options={"require": ["sub", "exp", "iat"]},
         )
 

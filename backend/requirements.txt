@@ -45,3 +45,9 @@ websockets==17.2
 # Integrated media pipeline and PDF certificates
 -r ../ai/requirements.txt
 reportlab==5.0.1
+
+# Google integrations for Round 2
+google-api-python-client
+google-auth
+google-auth-oauthlib
+google-auth-httplib2

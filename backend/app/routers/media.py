@@ -23,3 +23,79 @@ def history(event_id: UUID, db: Session = Depends(get_db), user: User = Depends(
     get_event(db, user, event_id, manage=True)
     return [{'id': r.id, 'created_at': r.created_at, 'result': r.result} for r in db.scalars(
         select(MediaAnalysis).where(MediaAnalysis.event_id == event_id).order_by(MediaAnalysis.created_at.desc()).limit(20))]
+
+
+@router.post('/{event_id}/media/store')
+def analyze_and_store(
+    event_id: UUID,
+    files: list[UploadFile] = File(...),
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    event = get_event(
+        db,
+        user,
+        event_id,
+        manage=True,
+    )
+
+    from app.services.media import analyze_uploads_for_storage
+    from app.services.drive_storage import upload_event_image
+
+    result, artifacts = analyze_uploads_for_storage(files)
+
+    uploads = []
+
+    for artifact in artifacts:
+        try:
+            uploaded = upload_event_image(
+                event_id=event.id,
+                event_title=event.title,
+                filename=artifact['filename'],
+                content=artifact['content'],
+                geotagged=artifact['geotagged'],
+            )
+
+            uploads.append(
+                {
+                    **uploaded,
+                    'status': 'uploaded',
+                }
+            )
+
+        except Exception:
+            uploads.append(
+                {
+                    'filename': artifact['filename'],
+                    'folder': (
+                        'Geotagged'
+                        if artifact['geotagged']
+                        else 'Standard'
+                    ),
+                    'status': 'failed',
+                }
+            )
+
+    result['drive'] = {
+        'eligible': len(artifacts),
+        'uploaded': sum(
+            item['status'] == 'uploaded'
+            for item in uploads
+        ),
+        'failed': sum(
+            item['status'] == 'failed'
+            for item in uploads
+        ),
+        'files': uploads,
+    }
+
+    record = MediaAnalysis(
+        event_id=event_id,
+        uploaded_by=user.id,
+        result=result,
+    )
+
+    db.add(record)
+    db.commit()
+
+    return result

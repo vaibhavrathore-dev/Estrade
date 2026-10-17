@@ -5,3 +5,4 @@ from app.models.venue import Venue
 from app.models.event import Event
 
 from app.models.operations import Assignment, Withdrawal, Participation, Certificate, MediaAnalysis
+from app.models.registration import EventRegistration, RegistrationField, RegistrationAnswer, Attendance

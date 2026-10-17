@@ -12,7 +12,7 @@ from app.main import app
 from app.db.session import engine, get_db
 from app.core.config import settings
 from app.core.security import hash_password, create_access_token
-from app.models import User, Committee, CommitteeMember, Venue, Event
+from app.models import User, Committee, CommitteeMember, Venue, Event, EventRegistration, Attendance
 
 @pytest.fixture
 def context():
@@ -122,6 +122,24 @@ def test_certificates(context):
     assert client.post(f"/api/v1/events/{future['id']}/participations", json=body, headers=headers(admin)).status_code == 422
     start = datetime.now(timezone.utc) - timedelta(days=2)
     event = create(client, admin, c, v, starts_at=start.isoformat(), ends_at=(start+timedelta(hours=1)).isoformat())
+
+    registration = EventRegistration(
+        event_id=event['id'],
+        user_id=student.id,
+        certificate_name=student.full_name,
+        status='registered',
+    )
+    db.add(registration)
+    db.flush()
+
+    db.add(
+        Attendance(
+            registration_id=registration.id,
+            checked_in_by=admin.id,
+        )
+    )
+    db.commit()
+
     url = f"/api/v1/events/{event['id']}/participations"
     assert client.post(url, json=body, headers=headers(student)).status_code == 403
     p = client.post(url, json=body, headers=headers(admin)); assert p.status_code == 201, p.text
@@ -216,3 +234,217 @@ def test_media_strips_metadata(context, monkeypatch):
     monkeypatch.setattr(service, 'analyze_image', inspect_clean)
     response = client.post(f"/api/v1/events/{event['id']}/media/analyze", files=[('files',('private.jpg',raw.getvalue(),'image/jpeg'))], headers=headers(admin))
     assert response.status_code == 200, response.text
+
+
+def test_round2_complete_event_lifecycle(context, monkeypatch):
+    from hashlib import sha256
+    from uuid import UUID
+
+    import app.routers.certificates as certificate_router
+    from app.models import Certificate, Event
+
+    client, db, admin, student, outsider, c, v, other = context
+
+    # 1. Organizer creates and publishes an upcoming event.
+    event = create(client, admin, c, v)
+
+    publication = client.patch(
+        f"/api/v1/events/{event['id']}/publication",
+        json={"is_published": True},
+        headers=headers(admin),
+    )
+
+    assert publication.status_code == 200, publication.text
+
+    # 2. Student registers using their profile certificate name.
+    registration_response = client.post(
+        f"/api/v1/events/{event['id']}/registrations",
+        json={
+            "certificate_name": student.full_name,
+            "answers": [],
+        },
+        headers=headers(student),
+    )
+
+    assert registration_response.status_code == 201, (
+        registration_response.text
+    )
+
+    registration = registration_response.json()
+
+    # Duplicate registration must be blocked.
+    assert client.post(
+        f"/api/v1/events/{event['id']}/registrations",
+        json={
+            "certificate_name": student.full_name,
+            "answers": [],
+        },
+        headers=headers(student),
+    ).status_code == 409
+
+    # 3. Student receives their signed QR/check-in token.
+    token_response = client.get(
+        f"/api/v1/registrations/{registration['id']}/check-in-token",
+        headers=headers(student),
+    )
+
+    assert token_response.status_code == 200, token_response.text
+
+    checkin_token = token_response.json()["token"]
+
+    # 4. Organizer scans the token and checks the student in.
+    checkin = client.post(
+        "/api/v1/check-in",
+        json={"token": checkin_token},
+        headers=headers(admin),
+    )
+
+    assert checkin.status_code == 200, checkin.text
+    assert checkin.json()["status"] == "checked_in"
+
+    # Duplicate attendance must be blocked.
+    assert client.post(
+        "/api/v1/check-in",
+        json={"token": checkin_token},
+        headers=headers(admin),
+    ).status_code == 409
+
+    # Student registration should now reflect attendance.
+    registrations = client.get(
+        "/api/v1/me/registrations",
+        headers=headers(student),
+    )
+
+    assert registrations.status_code == 200
+    mine = next(
+        row
+        for row in registrations.json()
+        if row["id"] == registration["id"]
+    )
+    assert mine["checked_in"] is True
+
+    # 5. Simulate completion of the event.
+    event_row = db.get(
+        Event,
+        UUID(event["id"]),
+    )
+
+    now = datetime.now(timezone.utc)
+
+    event_row.starts_at = now - timedelta(hours=3)
+    event_row.ends_at = now - timedelta(hours=1)
+
+    db.commit()
+
+    # 6. Organizer verifies participation from real QR attendance.
+    proof = client.post(
+        f"/api/v1/registrations/{registration['id']}/participation",
+        headers=headers(admin),
+    )
+
+    assert proof.status_code == 201, proof.text
+    assert proof.json()["verified"] is True
+    assert proof.json()["source"] == "qr_attendance"
+
+    # Do not send a real Gmail message during automated tests.
+    sent = {}
+
+    def fake_send_certificate_email(**kwargs):
+        sent.update(kwargs)
+        return "test-gmail-message-id"
+
+    monkeypatch.setattr(
+        certificate_router,
+        "send_certificate_email",
+        fake_send_certificate_email,
+    )
+
+    # 7. Issue certificate.
+    certificate_response = client.post(
+        (
+            "/api/v1/participations/"
+            f"{proof.json()['id']}/certificates"
+        ),
+        headers=headers(admin),
+    )
+
+    assert certificate_response.status_code == 201, (
+        certificate_response.text
+    )
+
+    certificate_data = certificate_response.json()
+
+    assert certificate_data["delivery_status"] == "sent"
+    assert certificate_data["verification_code"].startswith("EST-")
+
+    # Gmail service received the correct recipient and PDF.
+    assert sent["recipient_email"] == student.email
+    assert sent["participant_name"] == student.full_name
+    assert sent["pdf_bytes"].startswith(b"%PDF")
+
+    # 8. Public verification works using certificate code.
+    verification = client.get(
+        (
+            "/api/v1/certificate-verification/"
+            f"{certificate_data['verification_code']}"
+        )
+    )
+
+    assert verification.status_code == 200, verification.text
+
+    verified = verification.json()
+
+    assert verified["valid"] is True
+    assert (
+        verified["verification_code"]
+        == certificate_data["verification_code"]
+    )
+    assert verified["participant_name"] == student.full_name
+    assert verified["event_title"] == event["title"]
+
+    # 9. Recipient can download the generated certificate.
+    pdf_response = client.get(
+        certificate_data["download_url"],
+        headers=headers(student),
+    )
+
+    assert pdf_response.status_code == 200
+    assert pdf_response.content.startswith(b"%PDF")
+
+    # 10. Stored SHA-256 integrity fingerprint matches the PDF bytes.
+    certificate = db.get(
+        Certificate,
+        UUID(certificate_data["id"]),
+    )
+
+    assert certificate.file_hash_sha256
+    assert certificate.file_hash_sha256 == sha256(
+        pdf_response.content
+    ).hexdigest()
+
+    # 11. Delivery status is visible to recipient.
+    delivery = client.get(
+        (
+            f"/api/v1/certificates/"
+            f"{certificate_data['id']}/delivery"
+        ),
+        headers=headers(student),
+    )
+
+    assert delivery.status_code == 200
+    assert delivery.json()["delivery_status"] == "sent"
+
+
+def test_health_and_database_readiness(context):
+    client, db, admin, student, outsider, c, v, other = context
+
+    health = client.get("/api/v1/health")
+    assert health.status_code == 200
+    assert health.json() == {"status": "ok"}
+
+    ready = client.get("/api/v1/ready")
+    assert ready.status_code == 200
+    assert ready.json() == {
+        "status": "ready",
+        "database": "ok",
+    }

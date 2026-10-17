@@ -1,0 +1,35 @@
+# Review and supply secrets in Render before deployment. No database is created here.
+services:
+  - type: web
+    name: estrade-api
+    runtime: python
+    buildCommand: cd backend && pip install -r requirements.txt
+    startCommand: cd backend && bash start.sh
+    healthCheckPath: /api/v1/ready
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.14.4
+      - key: ENVIRONMENT
+        value: production
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: 5432
+      - key: DB_SSLMODE
+        value: require
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: JWT_SECRET_KEY
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: ESTRADE_PUBLIC_BASE_URL
+        sync: false
+      - key: ESTRADE_GMAIL_SENDER
+        sync: false
+      - key: ESTRADE_GOOGLE_TOKEN_JSON
+        sync: false

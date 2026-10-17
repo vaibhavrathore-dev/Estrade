@@ -1,3 +1,18 @@
+# Estrade recovery status — 18 October 2026
+
+Current acceptance evidence and manual instructions are in [INTEGRATION_RECOVERY_REPORT.md](INTEGRATION_RECOVERY_REPORT.md). The October 9 notes below are historical and contain workflows superseded by this recovery.
+
+- **22 backend tests passed**, including PostgreSQL rollback integration, OTP expiry/replay/limits, coordinator authorization, QR eligibility, certificate delivery failure, media bounds and Drive failure handling.
+- **6 scheduling service checks passed**. Existing venue-conflict protection is preserved.
+- **11 Playwright UI tests passed**. Updated obsolete lamp selectors to the existing curtain experience; landing implementation and assets were not changed.
+- Real-backend browser lifecycle passed with email transport mocked: signup/verification/login, faculty creation/publication, registration, QR ticket/manual check-in, participation approval, PDF/download/public verification, delivery failure, committee approval, assignment, withdrawal request and password recovery. Camera unavailable fallback and semantic action color checked.
+- Production frontend build, lint and installed Python dependency check passed.
+- Additive `recovery_workflows` migration reviewed and applied locally. Existing users retain verified status; new public signup requires verification.
+- Google credentials are present, but **live Gmail and Drive delivery were not exercised**. Physical-camera scanning and production deployment remain unverified.
+- Prepared Render/Vercel configuration; nothing was deployed. Use Node >=24 for the scanner dependency. Local Node 22 built and tested with an engine warning.
+
+---
+
 # Estrade integration status — 9 October 2026
 
 ## Completed and tested

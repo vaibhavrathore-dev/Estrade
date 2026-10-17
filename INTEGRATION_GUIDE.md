@@ -1,3 +1,5 @@
+> **October 18 recovery update:** use [INTEGRATION_RECOVERY_REPORT.md](INTEGRATION_RECOVERY_REPORT.md) for current workflows, deployment configuration, test evidence and the Student/Faculty manual guide. Signup now requires email OTP verification; certificate participation requires QR attendance. The older direct evidence-only certificate demo below is superseded. Use `frontend/tests/recovery-lifecycle.cjs` for current browser acceptance tests.
+
 # Estrade integration handoff
 
 ## Launch

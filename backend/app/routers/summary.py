@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.core.dependencies import get_current_user
 from app.db.session import get_db
 from app.models import User, Event, Assignment, Withdrawal, Participation, Certificate, MediaAnalysis
-from app.services.access import visible_events, memberships
+from app.services.access import visible_events, memberships, can_manage
 router = APIRouter(prefix='/api/v1', tags=['Dashboard'])
 
 @router.get('/dashboard')
@@ -17,7 +17,8 @@ def dashboard(db: Session = Depends(get_db), user: User = Depends(get_current_us
     pending = db.scalar(select(func.count()).select_from(Withdrawal).join(Assignment).where(
         Assignment.event_id.in_(private_ids), Withdrawal.status == 'pending'))
     participants = db.scalar(select(func.count()).select_from(Participation).where(Participation.event_id.in_(private_ids)))
-    media = db.scalars(select(MediaAnalysis).where(MediaAnalysis.event_id.in_(private_ids)).order_by(MediaAnalysis.created_at.desc()).limit(10)).all()
+    managed_ids = [e.id for e in events if can_manage(db, user, e.committee_id)]
+    media = db.scalars(select(MediaAnalysis).where(MediaAnalysis.event_id.in_(managed_ids)).order_by(MediaAnalysis.created_at.desc()).limit(10)).all()
     return {'upcoming': sum(e.status == 'confirmed' and e.starts_at > now for e in events),
             'ongoing': sum(e.status == 'confirmed' and e.starts_at <= now < e.ends_at for e in events),
             'completed': sum(e.status == 'confirmed' and e.ends_at <= now for e in events),

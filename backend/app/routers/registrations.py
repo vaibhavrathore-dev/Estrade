@@ -223,7 +223,7 @@ def register_for_event(
         if field.required
         and (
             field.id not in answer_map
-            or answer_map[field.id] in (None, "")
+            or answer_map[field.id] in (None, "", [])
         )
     ]
 
@@ -232,6 +232,22 @@ def register_for_event(
             422,
             "Missing required fields: " + ", ".join(missing),
         )
+
+    if len(answer_map) != len(data.answers):
+        raise HTTPException(422, "Duplicate field answers")
+    for field_id, value in answer_map.items():
+        field = field_map[field_id]
+        kind = field.field_type
+        valid = (
+            (kind in {"text", "url", "phone"} and isinstance(value, str) and len(value) <= 2000)
+            or (kind == "number" and type(value) in (int, float))
+            or (kind == "boolean" and type(value) is bool)
+            or (kind == "select" and value in (field.options or []))
+            or (kind == "multiselect" and isinstance(value, list)
+                and all(isinstance(v, str) and v in (field.options or []) for v in value))
+        )
+        if not valid:
+            raise HTTPException(422, f"Invalid answer for {field.label}")
 
     certificate_name = (
         data.certificate_name.strip()
@@ -384,7 +400,7 @@ def check_in(
         KeyError,
     ):
         raise HTTPException(
-            401,
+            422,
             "Invalid or expired check-in QR",
         )
 
@@ -409,6 +425,11 @@ def check_in(
         registration.event_id,
         manage=True,
     )
+
+    if data.event_id is not None and data.event_id != event.id:
+        raise HTTPException(422, "QR belongs to a different event")
+    if event.status != "confirmed":
+        raise HTTPException(422, "Check-in requires a confirmed event")
 
     existing = db.scalar(
         select(Attendance).where(
@@ -498,3 +519,15 @@ def event_attendance(
         }
         for attendance, registration, participant in rows
     ]
+
+
+@router.get("/events/{event_id}/registrations")
+def event_registrations(event_id: UUID, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    get_event(db, user, event_id, manage=True)
+    return [{"id": r.id, "user_id": u.id, "full_name": u.full_name,
+             "certificate_name": r.certificate_name, "status": r.status,
+             "checked_in": a is not None, "registered_at": r.registered_at}
+            for r, u, a in db.execute(select(EventRegistration, User, Attendance)
+                .join(User, User.id == EventRegistration.user_id)
+                .outerjoin(Attendance, Attendance.registration_id == EventRegistration.id)
+                .where(EventRegistration.event_id == event_id).order_by(EventRegistration.registered_at))]

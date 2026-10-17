@@ -103,3 +103,12 @@ def availability(committee_id: UUID, db: Session = Depends(get_db), user: User =
              'starts_at': e.starts_at, 'ends_at': e.ends_at}
             for a, e in db.execute(select(Assignment, Event).join(Event, Event.id == Assignment.event_id)
             .where(Event.committee_id == committee_id, Event.status != 'cancelled', Assignment.status == 'active'))]
+
+@router.get('/me/assignments')
+def my_assignments(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    return [{'id': a.id, 'event_title': e.title, 'starts_at': e.starts_at, 'ends_at': e.ends_at,
+             'duty': a.duty, 'status': a.status, 'assigned_by': organizer.full_name,
+             'withdrawals': [{'id': w.id, 'status': w.status, 'reason': w.reason} for w in db.scalars(select(Withdrawal).where(Withdrawal.assignment_id == a.id))]}
+            for a, e, organizer in db.execute(select(Assignment, Event, User)
+                .join(Event, Event.id == Assignment.event_id).join(User, User.id == Assignment.assigned_by)
+                .where(Assignment.user_id == user.id).order_by(Event.starts_at))]

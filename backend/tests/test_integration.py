@@ -15,7 +15,14 @@ from app.core.security import hash_password, create_access_token
 from app.models import User, Committee, CommitteeMember, Venue, Event, EventRegistration, Attendance
 
 @pytest.fixture
-def context():
+def context(monkeypatch):
+    # Never contact real email services from fixtures, including browser fixtures.
+    def unavailable(**kwargs):
+        raise RuntimeError("Email disabled in tests")
+    monkeypatch.setattr("app.routers.certificates.send_certificate_email", unavailable)
+    app.state.test_codes = {}
+    monkeypatch.setattr("app.services.email_challenges.email_ready", lambda: None)
+    monkeypatch.setattr("app.services.email_challenges.send_code", lambda email, code, purpose: app.state.test_codes.update({(email, purpose): code}))
     with engine.connect() as connection:
         transaction = connection.begin()
         with Session(bind=connection, join_transaction_mode='create_savepoint', expire_on_commit=False) as db:
@@ -56,6 +63,8 @@ def test_auth(context):
     assert 'password_hash' not in response.json()
     assert client.post('/api/v1/auth/register', json=body).status_code == 409
     assert client.post('/api/v1/auth/register', json={**body, 'email':'broken'}).status_code == 422
+    assert client.post('/api/v1/auth/login', json={'email':body['email'], 'password':body['password']}).status_code == 401
+    assert client.post('/api/v1/auth/verification/verify', json={'email':body['email'], 'code':app.state.test_codes[(body['email'], 'verify')]}).status_code == 200
     response = client.post('/api/v1/auth/login', json={'email':body['email'], 'password':body['password']})
     assert response.status_code == 200
     assert client.get('/api/v1/auth/me', headers={'Authorization':f"Bearer {response.json()['access_token']}"}).json()['full_name'] == 'New Student'
@@ -112,7 +121,7 @@ def test_coordination(context):
     assert client.patch(review, json={'status':'approved'}, headers=headers(admin)).status_code == 409
     assert client.post(url, json=body, headers=headers(admin)).status_code == 201
     rows = client.get(url, headers=headers(admin)).json()
-    assert len(rows) == 2 and rows[0]['status'] == 'withdrawn'
+    assert len(rows) == 2 and {r['status'] for r in rows} == {'withdrawn', 'active'}
     assert client.get('/api/v1/dashboard', headers=headers(admin)).status_code == 200
 
 def test_certificates(context):
@@ -399,8 +408,7 @@ def test_round2_complete_event_lifecycle(context, monkeypatch):
         verified["verification_code"]
         == certificate_data["verification_code"]
     )
-    assert verified["participant_name"] == student.full_name
-    assert verified["event_title"] == event["title"]
+    assert "participant_name" not in verified and "event_title" not in verified
 
     # 9. Recipient can download the generated certificate.
     pdf_response = client.get(

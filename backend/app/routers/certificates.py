@@ -26,6 +26,9 @@ def confirm(event_id: UUID, data: ConfirmParticipation, db: Session = Depends(ge
     target = db.scalar(select(User).where(User.email == str(data.email).lower(), User.is_active.is_(True)))
     if target is None:
         raise HTTPException(422, 'No active participant account with that email')
+    registration = db.scalar(select(EventRegistration).where(EventRegistration.event_id == event_id, EventRegistration.user_id == target.id, EventRegistration.status == 'registered'))
+    if registration is None or db.scalar(select(Attendance).where(Attendance.registration_id == registration.id)) is None:
+        raise HTTPException(422, 'Verified QR attendance is required before participation approval')
     from app.models import Event
     db.execute(select(Event).where(Event.id == event_id).with_for_update())
     count = db.scalar(select(func.count()).select_from(Participation).where(Participation.event_id == event_id))
@@ -46,7 +49,7 @@ def approve_registered_participation(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
-    registration = db.get(EventRegistration, registration_id)
+    registration = db.scalar(select(EventRegistration).where(EventRegistration.id == registration_id).with_for_update())
 
     if registration is None:
         raise HTTPException(404, 'Registration not found')
@@ -259,9 +262,7 @@ def verify_by_code(
     return {
         'valid': True,
         'verification_code': record.verification_code,
-        'participant_name': record.participant_name,
-        'event_title': record.event_title,
-        'event_date': record.event_date,
+
         'college_name': record.college_name,
         'department_name': record.department_name,
         'certificate_type': record.certificate_type,
@@ -373,4 +374,5 @@ def my_certificates(db: Session = Depends(get_db), user: User = Depends(get_curr
     records = db.scalars(select(Certificate).join(Participation, Participation.id == Certificate.participation_id)
                          .where(Participation.user_id == user.id).order_by(Certificate.created_at.desc()))
     return [{'id': c.id, 'event_title': c.event_title, 'event_date': c.event_date,
-             'certificate_type': c.certificate_type, 'issued_at': c.created_at} for c in records]
+             'certificate_type': c.certificate_type, 'issued_at': c.created_at,
+             'delivery_status': c.delivery_status, 'verification_code': c.verification_code} for c in records]

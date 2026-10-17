@@ -1,17 +1,12 @@
 import json
-import os
+from app.core.config import settings
 from pathlib import Path
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 
 
-TOKEN_FILE = Path(
-    os.getenv(
-        "ESTRADE_GOOGLE_TOKEN_FILE",
-        "google_token.json",
-    )
-)
+TOKEN_FILE = Path(settings.ESTRADE_GOOGLE_TOKEN_FILE)
 
 GOOGLE_SCOPES = [
     "https://www.googleapis.com/auth/gmail.send",
@@ -20,7 +15,7 @@ GOOGLE_SCOPES = [
 
 
 def google_credentials():
-    token_json = os.getenv("ESTRADE_GOOGLE_TOKEN_JSON")
+    token_json = settings.ESTRADE_GOOGLE_TOKEN_JSON
 
     if token_json:
         credentials = Credentials.from_authorized_user_info(

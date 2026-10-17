@@ -27,4 +27,5 @@ class EventRegistrationCreate(BaseModel):
 
 
 class CheckInRequest(BaseModel):
+    event_id: UUID | None = None
     token: str = Field(min_length=20)

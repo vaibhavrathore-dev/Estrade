@@ -97,3 +97,5 @@ class CommitteeMember(Base):
         "User",
         foreign_keys=[verified_by],
     )
+
+    request_reason: Mapped[str | None] = mapped_column(String(2000), nullable=True)

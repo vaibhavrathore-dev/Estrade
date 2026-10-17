@@ -33,7 +33,8 @@ def register_user(
         email=email,
         password_hash=hash_password(data.password),
         user_type="student",
-        is_active=True,
+        is_active=False,
+        email_verified=False,
     )
 
     db.add(user)

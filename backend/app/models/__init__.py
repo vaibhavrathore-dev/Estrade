@@ -6,3 +6,4 @@ from app.models.event import Event
 
 from app.models.operations import Assignment, Withdrawal, Participation, Certificate, MediaAnalysis
 from app.models.registration import EventRegistration, RegistrationField, RegistrationAnswer, Attendance
+from app.models.email_challenge import EmailChallenge

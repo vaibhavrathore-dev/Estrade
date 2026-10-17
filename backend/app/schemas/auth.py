@@ -18,6 +18,8 @@ class RegisterRequest(BaseModel):
 
 # Registration response
 class RegisterResponse(BaseModel):
+    verification_required: bool = False
+    delivery_status: str | None = None
     id: UUID
     full_name: str
     email: EmailStr

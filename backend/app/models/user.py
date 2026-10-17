@@ -63,3 +63,5 @@ class User(Base):
         nullable=False,
         server_default=func.now()
     )
+
+    email_verified: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="true")

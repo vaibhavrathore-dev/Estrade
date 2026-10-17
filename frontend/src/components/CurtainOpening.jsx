@@ -55,12 +55,18 @@ export default function CurtainOpening() {
     <>
       {phase !== "done" && (
         <div className={`estrade-opening estrade-opening--${phase}`} aria-label="Estrade theatre opening">
-          <div className="estrade-opening__stage" aria-hidden="true">
-            <div className="estrade-opening__halo" />
-            <div className="estrade-opening__stage-name">estrade</div>
-            <div className="estrade-opening__tagline">Behind every great event.</div>
-            <div className="estrade-opening__floor" />
-          </div>
+          {/* Elegant Estrade Opening Image */}
+<div
+  className="estrade-opening__stage"
+  aria-hidden="true"
+  style={{
+    backgroundImage: "url('/images/estrade-opening.png')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    backgroundColor: "#FAF8F3",
+  }}
+/>
           <div className="estrade-opening__pelmet" aria-hidden="true" />
           <div className="estrade-opening__curtain estrade-opening__curtain--left" aria-hidden="true" />
           <div

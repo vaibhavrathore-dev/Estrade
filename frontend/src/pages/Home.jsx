@@ -132,6 +132,9 @@ export default function Home() {
               <Link className="button primary" to="/login">
                 Set the stage <ArrowUpRight size={18} />
               </Link>
+              <Link className="text-link" to="/dashboard-preview">
+  View Dashboard <ArrowRight size={18} />
+</Link>
               <a className="text-link" href="#lifecycle">
                 Explore the journey <ArrowRight size={18} />
               </a>

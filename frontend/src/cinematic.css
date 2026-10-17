@@ -11,14 +11,14 @@
   color-scheme: dark;
 }
 :root[data-light="on"] {
-  --canvas: #f3efe5;
-  --surface: #eae4d8;
-  --ink: #38282b;
-  --subtle: #70615c;
-  --rule: #38282b26;
-  --accent: #772c3c;
-  --button: #702737;
-  --button-ink: #fff8e9;
+  --canvas: #faf8f3;      /* Estrade signature ivory */
+  --surface: #f3ede3;     /* Warm cream cards */
+  --ink: #292524;         /* Charcoal body text */
+  --subtle: #685e59;      /* Secondary text */
+  --rule: #76071924;      /* Soft burgundy separators */
+  --accent: #760719;      /* Estrade burgundy */
+  --button: #760719;      /* Burgundy CTA buttons */
+  --button-ink: #fffdf9;  /* Ivory button text */
   color-scheme: light;
 }
 html {
@@ -1021,7 +1021,7 @@ svg {
   text-align: center;
   overflow: hidden;
   padding: 90px 20px 190px;
-  background: #382028;
+  background: #570713;
   color: #f8efdc;
 }
 .closing-stage::before {
@@ -1106,7 +1106,7 @@ svg {
 .estrade-login .login-brand-panel {
   position: relative;
   overflow: hidden;
-  background: #342128;
+  background: #570713;
   color: #f6eddb;
   padding: 40px 9%;
   display: flex;
@@ -1385,7 +1385,7 @@ svg {
 }
 .estrade-dashboard .dashboard-sidebar {
   width: 238px;
-  background: #302128;
+  background: #570713;
   color: #eee4d1;
   border-right: 1px solid #ffffff20;
   padding: 32px 22px;
@@ -1413,8 +1413,8 @@ svg {
   min-height: 48px;
 }
 .estrade-dashboard .sidebar-link.selected {
-  background: #e9dac0;
-  color: #49252e;
+  background: #f3ede3;
+  color: #760719;
   box-shadow: inset 3px 0 #b28a4c;
 }
 .estrade-dashboard .sidebar-link:hover {
@@ -1422,8 +1422,8 @@ svg {
   color: #fff;
 }
 .estrade-dashboard .sidebar-link.selected:hover {
-  background: #e9dac0;
-  color: #49252e;
+  background: #f3ede3;
+  color: #760719;
 }
 .estrade-dashboard .sidebar-bottom {
   font-size: 14px;
@@ -2680,4 +2680,150 @@ svg {
 }
 .stage-pool {
   background: radial-gradient(ellipse, #edc77b70, transparent 70%);
+}
+
+/* ESTRADE ROUND 2: IVORY CINEMATIC BRAND REFINEMENT */
+/* Light-mode visual corrections only. The curtain animation and story logic stay intact. */
+
+/* Hero: restore the understated burgundy wordmark and soft editorial spotlight. */
+:root[data-light="on"] .cinema-home .hero-stage.estrade-theatre-showcase {
+  background:
+    radial-gradient(ellipse 55% 54% at 52% 42%, #fffaf0 0%, #f5ede2 54%, #ede2d5 100%);
+  color: #760719;
+  border: 1px solid #e6ddd1;
+  box-shadow: 0 18px 48px rgba(87, 7, 19, 0.07);
+}
+:root[data-light="on"] .estrade-theatre-showcase__arch {
+  border: none;
+  box-shadow: none;
+  background: none;
+}
+:root[data-light="on"] .estrade-theatre-showcase__beam {
+  background: linear-gradient(180deg, #fff9e7c2, #e4c4ad24 75%, transparent);
+  opacity: .85;
+}
+:root[data-light="on"] .estrade-theatre-showcase__glow {
+  background: radial-gradient(ellipse, #f7e2c7a8 0%, #f4dfc366 33%, transparent 72%);
+}
+:root[data-light="on"] .estrade-theatre-showcase__name {
+  color: #760719;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -.065em;
+  text-shadow: 0 9px 25px #76071912;
+}
+:root[data-light="on"] .estrade-theatre-showcase__name span {
+  color: #760719;
+}
+:root[data-light="on"] .estrade-theatre-showcase__overline,
+:root[data-light="on"] .estrade-theatre-showcase__footer {
+  color: #79545b;
+}
+:root[data-light="on"] .estrade-theatre-showcase__content p {
+  color: #60363f;
+}
+:root[data-light="on"] .estrade-theatre-showcase__floor {
+  border-top: 1px solid #76071926;
+  background: linear-gradient(#fff6e51a, #eadccd67);
+}
+
+/* Four-act story: same scroll/sticky animations, now ivory + burgundy. */
+:root[data-light="on"] .estrade-story {
+  --story-bg: #faf8f3;
+  --story-cream: #292524;
+  --story-muted: #685e59;
+  --story-gold: #760719;
+  background: var(--story-bg);
+  color: var(--story-cream);
+  border-top-color: #e6ddd1;
+  border-bottom-color: #e6ddd1;
+}
+:root[data-light="on"] .estrade-story__intro::before {
+  background: radial-gradient(ellipse at 50% 37%, #76071912, transparent 66%);
+}
+:root[data-light="on"] .estrade-story__intro > p,
+:root[data-light="on"] .estrade-story__chapter p {
+  color: #625752;
+}
+:root[data-light="on"] .estrade-story__intro h2,
+:root[data-light="on"] .estrade-story__chapter h3 {
+  color: #292524;
+}
+:root[data-light="on"] .estrade-story__eyebrow,
+:root[data-light="on"] .estrade-story__scroll-hint,
+:root[data-light="on"] .estrade-story__rule,
+:root[data-light="on"] .estrade-story__coda {
+  color: #760719;
+}
+:root[data-light="on"] .estrade-story__rule {
+  border-top-color: #76071944;
+}
+:root[data-light="on"] .estrade-story__progress span {
+  color: #786965;
+}
+:root[data-light="on"] .estrade-story__progress span.is-active {
+  color: #760719;
+}
+:root[data-light="on"] .estrade-story__progress span i {
+  background: #d9c5c0;
+}
+:root[data-light="on"] .estrade-story__progress span.is-active i {
+  background: #760719;
+}
+:root[data-light="on"] .estrade-story__outro {
+  background: radial-gradient(ellipse at center, #7607190c, transparent 65%);
+}
+:root[data-light="on"] .estrade-story__outro-actions a {
+  border-color: #7607195e;
+  color: #760719;
+}
+:root[data-light="on"] .estrade-story__outro-actions a:last-child {
+  background: #760719;
+  color: #fffdf9;
+}
+:root[data-light="on"] .estrade-story__outro-actions a:hover {
+  background: #570713;
+  color: #fffdf9;
+}
+
+/* The stage illustration itself becomes warm, not an isolated black rectangle. */
+:root[data-light="on"] .estrade-story-art {
+  background: radial-gradient(ellipse at 50% 37%, #fffaf1, #f2e7dd 58%, #e9dcd0 100%);
+  border-color: #76071933;
+  box-shadow: 0 24px 65px #76071916;
+}
+:root[data-light="on"] .estrade-story-art__arch {
+  border-color: #9f657033;
+  box-shadow: inset 0 0 24px #7607190b, 0 0 0 2px #76071913;
+}
+:root[data-light="on"] .estrade-story-art__spotlight {
+  background: radial-gradient(ellipse at 50% 4%, #fff9e7b0, #eedacb70 38%, transparent 75%);
+}
+:root[data-light="on"] .estrade-story-art__floor {
+  border-top-color: #7607192e;
+  background: linear-gradient(#ead8ca26, #d6b7a84d);
+}
+:root[data-light="on"] .estrade-story-art__overline,
+:root[data-light="on"] .estrade-story-art__footer {
+  color: #760719;
+}
+:root[data-light="on"] .estrade-story-art__note {
+  color: #570713;
+  background: #fffaf5;
+  border-color: #76071950;
+  box-shadow: 0 13px 34px #76071912;
+}
+:root[data-light="on"] .estrade-story-art__question {
+  color: #76071959;
+}
+:root[data-light="on"] .estrade-story-art__photos {
+  background: #760719;
+  color: #fffdf9;
+}
+
+/* Mobile keeps the artwork from overpowering the text. */
+@media (max-width: 760px) {
+  :root[data-light="on"] .cinema-home .hero-stage.estrade-theatre-showcase {
+    box-shadow: 0 12px 28px #7607190c;
+  }
 }

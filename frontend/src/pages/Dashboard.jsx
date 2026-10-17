@@ -8,11 +8,14 @@ import UpcomingEvents from "../components/UpcomingEvents";
 import EventReadiness from "../components/EventReadiness";
 import EventForm from "../components/EventForm";
 import EventWorkspace from "../components/EventWorkspace";
+import DashboardPreviewWorkspace from "../components/DashboardPreviewWorkspace";
+import { dashboardPreviewData } from "../components/dashboardPreviewData";
 import { apiRequest, authAPI, eventAPI } from "../services/api";
 import "./Dashboard.css";
 import "./Operations.css";
+import "./DashboardReimagined.css";
 
-export default function Dashboard({ initialCreateEvent = false }) {
+export default function Dashboard({ initialCreateEvent = false, previewMode = false }) {
   const navigate = useNavigate();
   const [activePage, setActivePage] = useState("Overview");
   const [searchQuery, setSearchQuery] = useState("");
@@ -22,18 +25,38 @@ export default function Dashboard({ initialCreateEvent = false }) {
   const [creating, setCreating] = useState(initialCreateEvent);
   const [selected, setSelected] = useState("");
   const [committeeFilter, setCommitteeFilter] = useState("");
+  const [certificateError, setCertificateError] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
+
+  // Certificates are optional for the overview. If their endpoint is unavailable,
+  // keep the event workspace visible instead of failing the entire dashboard.
   const load = useCallback(async () => {
-    const [user, events, venues, committees, summary, certificates] =
+    if (previewMode) {
+      setData(dashboardPreviewData);
+      setCertificateError("");
+      return;
+    }
+    const [user, events, venues, committees, summary, certificateResult] =
       await Promise.all([
         authAPI.me(),
         eventAPI.list(),
         apiRequest("/api/v1/venues"),
         apiRequest("/api/v1/committees"),
         apiRequest("/api/v1/dashboard"),
-        apiRequest("/api/v1/certificates"),
+        apiRequest("/api/v1/certificates")
+          .then((items) => ({ items, error: "" }))
+          .catch((error) => ({ items: [], error: error.message })),
       ]);
-    setData({ user, events, venues, committees, summary, certificates });
-  }, []);
+    setCertificateError(certificateResult.error);
+    setData({
+      user,
+      events,
+      venues,
+      committees,
+      summary,
+      certificates: certificateResult.items,
+    });
+  }, [previewMode]);
   // load updates state only after API promises resolve.
   useEffect(() => {
     // The loader updates state after its API promises resolve.
@@ -42,13 +65,17 @@ export default function Dashboard({ initialCreateEvent = false }) {
   }, [load]);
   const refresh = async () => {
     setMessage("");
+    setRefreshing(true);
     try {
       await load();
     } catch (e) {
       setMessage(e.message);
+    } finally {
+      setRefreshing(false);
     }
   };
   function openCreateEvent() {
+    if (previewMode) return;
     if (!data) {
       setMessage(
         "Workspace data is not ready. Please retry loading your workspace before creating an event.",
@@ -107,7 +134,7 @@ export default function Dashboard({ initialCreateEvent = false }) {
           : e.status,
       color: e.status === "confirmed" ? "green" : "blue",
     }));
-  const canCreate = data?.committees.some((c) => c.can_manage);
+  const canCreate = !previewMode && data?.committees.some((c) => c.can_manage);
   const featured = [...rows]
     .filter((e) => e.status === "Upcoming" || e.status === "Ongoing")
     .sort((a, b) => new Date(a.starts_at) - new Date(b.starts_at))[0];
@@ -120,6 +147,7 @@ export default function Dashboard({ initialCreateEvent = false }) {
           setNotice("");
         }}
         role={data?.user.user_type}
+        previewMode={previewMode}
       />
       <div className="dashboard-main">
         <Topbar
@@ -130,18 +158,37 @@ export default function Dashboard({ initialCreateEvent = false }) {
           pending={data?.summary.pending_withdrawals}
         />
         <main className="dashboard-content">
-          <div className="command-heading">
-            <span className="eyebrow">
-              ESTRADE / {activePage.toUpperCase()}
-            </span>
-            <h1>
-              Your campus, <em>in motion.</em>
-            </h1>
-            <p>
-              {data
-                ? `${data.user.full_name} · Your event command center`
-                : "Opening your event command center"}
-            </p>
+          {previewMode && <div className="estrade-preview-banner" role="status"><strong>DESIGN PREVIEW</strong><span>Illustrative sample data · Database connection not required · All write actions disabled</span></div>}
+          <div className="command-heading estrade-command-heading">
+            <div>
+              <span className="eyebrow">
+                ESTRADE / FACULTY WORKSPACE / {activePage.toUpperCase()}
+              </span>
+              <h1>
+                {activePage === "Overview" ? (
+                  <>Your campus, <em>in motion.</em></>
+                ) : (
+                  <>{activePage}<em>.</em></>
+                )}
+              </h1>
+              <p>
+                {data
+                  ? `${data.user.full_name} · ${activePage === "Overview" ? "Your event command center" : "Manage your campus events"}`
+                  : "Opening your event command center"}
+              </p>
+            </div>
+            <div className="estrade-heading-actions">
+              {data && <span className="estrade-live-indicator"><i /> Connected workspace</span>}
+              <button
+                type="button"
+                className="estrade-refresh-button"
+                onClick={refresh}
+                disabled={refreshing}
+                aria-label="Refresh dashboard information"
+              >
+                {refreshing ? "Refreshing…" : "↻ Refresh"}
+              </button>
+            </div>
           </div>
           {notice && (
             <div role="status" className="operations-message">
@@ -165,11 +212,35 @@ export default function Dashboard({ initialCreateEvent = false }) {
           )}
           {data && (
             <>
-              <DashboardStats summary={data.summary} />
-              <WithdrawalAlert
-                count={data.summary.pending_withdrawals}
-                onReview={() => setActivePage("Coordinators")}
-              />
+              {activePage === "Overview" && (
+                <>
+                  <div className="estrade-overview-intro">
+                    <div>
+                      <span className="eyebrow">TODAY AT A GLANCE</span>
+                      <h2>Everything your event needs, in one place.</h2>
+                    </div>
+                    <div className="estrade-quick-actions">
+                      <button type="button" onClick={() => setActivePage("Events")}>Explore events →</button>
+                      {canCreate && (
+                        <button type="button" className="is-primary" onClick={openCreateEvent}>
+                          + Create event
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  <DashboardStats summary={data.summary} />
+                  <WithdrawalAlert
+                    count={data.summary.pending_withdrawals}
+                    onReview={() => setActivePage("Coordinators")}
+                  />
+                </>
+              )}
+              {activePage === "Coordinators" && data.summary.pending_withdrawals > 0 && (
+                <WithdrawalAlert
+                  count={data.summary.pending_withdrawals}
+                  onReview={() => setNotice("Choose an event below to review its coordinator operations.")}
+                />
+              )}
               {activePage === "Overview" && (
                 <section className="command-feature">
                   {featured ? (
@@ -262,12 +333,33 @@ export default function Dashboard({ initialCreateEvent = false }) {
                   <EventReadiness events={events} summary={data.summary} />
                 </div>
               )}
+              {activePage === "Committees" && (
+                <section className="estrade-committee-section">
+                  <div className="section-title-row"><div><span className="eyebrow">CAMPUS ORGANIZATION</span><h2>Committee directory</h2></div></div>
+                  {data.committees.length === 0 ? <p>No committees are visible to your account yet.</p> : (
+                    <div className="estrade-committee-grid">{data.committees.map((committee) => (
+                      <article className="estrade-committee-card" key={committee.id}>
+                        <span className="estrade-committee-monogram" aria-hidden="true">{committee.name?.charAt(0) || "C"}</span>
+                        <div><h3>{committee.name}</h3><p>{committee.role ? `${committee.role} · ${committee.membership_status || "membership"}` : "Committee"}</p></div>
+                        <span className={`estrade-pill ${committee.can_manage ? "can-manage" : ""}`}>{committee.can_manage ? "Can manage" : "View only"}</span>
+                      </article>
+                    ))}</div>
+                  )}
+                </section>
+              )}
               {activePage === "Certificates" && (
                 <section className="operations-panel">
+                  <div className="estrade-section-kicker">CERTIFICATE STUDIO</div>
                   <h2>My certificates</h2>
-                  {data.certificates.length === 0 && (
+                  {previewMode && <p className="estrade-preview-inline">Sample preview only. Certificate downloads and issuance require a connected account.</p>}
+                  {certificateError ? (
+                    <div role="alert" className="operations-message">
+                      Certificates could not be loaded: {certificateError}
+                      <button type="button" onClick={refresh}>Retry</button>
+                    </div>
+                  ) : data.certificates.length === 0 ? (
                     <p>No certificates issued to your account yet.</p>
-                  )}
+                  ) : null}
                   {data.certificates.map((c) => (
                     <div className="operations-row" key={c.id}>
                       {c.event_title} ·{" "}
@@ -279,7 +371,7 @@ export default function Dashboard({ initialCreateEvent = false }) {
                   ))}
                 </section>
               )}
-              {activePage !== "Overview" && activePage !== "Settings" && (
+              {!["Overview", "Settings", "Certificates", "Committees"].includes(activePage) && (
                 <>
                   <section className="operations-panel">
                     <h2>{activePage}</h2>
@@ -321,57 +413,43 @@ export default function Dashboard({ initialCreateEvent = false }) {
                         ))}
                       </select>
                     </label>
-                    {activePage === "Tasks" && (
-                      <p>
-                        Scheduling, staffing, and withdrawal actions are
-                        available below. A separate task checklist is not
-                        implemented.
-                      </p>
-                    )}
                   </section>
-                  {selectedEvent && (
+                  {selectedEvent && (previewMode ? (
+                    <DashboardPreviewWorkspace
+                      key={`${selectedEvent.id}-${activePage}`}
+                      event={selectedEvent}
+                      committee={data.committees.find((c) => c.id === selectedEvent.committee_id)}
+                      venue={data.venues.find((v) => v.id === selectedEvent.venue_id)}
+                      section={activePage}
+                    />
+                  ) : (
                     <EventWorkspace
                       key={`${selectedEvent.id}-${activePage}`}
                       event={selectedEvent}
-                      committee={data.committees.find(
-                        (c) => c.id === selectedEvent.committee_id,
-                      )}
-                      venue={data.venues.find(
-                        (v) => v.id === selectedEvent.venue_id,
-                      )}
+                      committee={data.committees.find((c) => c.id === selectedEvent.committee_id)}
+                      venue={data.venues.find((v) => v.id === selectedEvent.venue_id)}
                       user={data.user}
                       section={activePage}
                       onChanged={refresh}
                     />
-                  )}
+                  ))}
                 </>
               )}
               {activePage === "Settings" && (
                 <section className="operations-panel">
-                  <h2>Your account</h2>
-                  <p>
-                    {data.user.full_name} · {data.user.email} ·{" "}
-                    {data.user.user_type}
-                  </p>
-                  <p>
-                    For security, re-authentication is required after a full
-                    page reload.
-                  </p>
-                  <button
-                    onClick={() => {
-                      authAPI.setToken(null);
-                      navigate("/login");
-                    }}
-                  >
-                    Sign out
-                  </button>
+                  <h2>{previewMode ? "Preview settings" : "Your account"}</h2>
+                  <p>{data.user.full_name} · {data.user.email} · {data.user.user_type}</p>
+                  {previewMode ? <p>Design preview is isolated from the database. Sign in to use the real workspace.</p> : <>
+                    <p>For security, re-authentication is required after a full page reload.</p>
+                    <button onClick={() => { authAPI.setToken(null); navigate("/login"); }}>Sign out</button>
+                  </>}
                 </section>
               )}
             </>
           )}
         </main>
       </div>
-      {creating && data && (
+      {creating && data && !previewMode && (
         <EventForm
           committees={data.committees}
           venues={data.venues}

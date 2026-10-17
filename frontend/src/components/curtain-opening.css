@@ -1,0 +1,211 @@
+/* Estrade theatrical opening. Isolated prefix; no changes to backend or dashboard. */
+.estrade-opening {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  overflow: hidden;
+  isolation: isolate;
+  background: #100a0c;
+  color: #fbf1df;
+  font-family: Georgia, "Times New Roman", serif;
+}
+.estrade-opening__stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 45%, #5a2630 0%, #21151b 39%, #100a0c 83%);
+}
+.estrade-opening__halo {
+  position: absolute;
+  width: min(82vw, 920px);
+  height: 80vh;
+  top: -12vh;
+  opacity: 0;
+  background: radial-gradient(ellipse at center, #f5d8a45a, #e5bb7621 34%, transparent 69%);
+  filter: blur(30px);
+  transition: opacity 1.5s ease 0.7s;
+  pointer-events: none;
+}
+.estrade-opening__stage-name {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(5rem, 16vw, 17rem);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.065em;
+  color: #fff4e5;
+  opacity: 0;
+  transform: translateY(22px) scale(0.975);
+  filter: blur(12px);
+  transition: opacity 1.15s ease 0.45s, transform 1.35s ease 0.45s, filter 1.35s ease 0.45s;
+}
+.estrade-opening__tagline {
+  position: relative;
+  z-index: 1;
+  margin-top: 1.5rem;
+  color: #eacda6;
+  font-style: italic;
+  font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 1s ease 1.05s, transform 1s ease 1.05s;
+}
+.estrade-opening__floor {
+  position: absolute;
+  inset: auto 0 0;
+  height: 21vh;
+  border-top: 1px solid #f6ce8c26;
+  background: linear-gradient(180deg, #4b273312, #090406b5),
+    repeating-linear-gradient(90deg, transparent 0 14%, #b7926520 14.2%, transparent 14.4% 28%);
+  transform-origin: bottom;
+  transform: perspective(450px) rotateX(23deg) scale(1.5);
+}
+.estrade-opening__curtain {
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  bottom: 0;
+  width: 53%;
+  /* Highlights and shadows repeat with irregular widths to simulate velvet folds. */
+  background:
+    linear-gradient(90deg, #140408b8, transparent 12%, transparent 86%, #140408b8),
+    repeating-linear-gradient(93deg,
+      #340612 0%, #710f27 5%, #b52643 9%, #6e1026 13%,
+      #310713 17%, #8c1530 22%, #48091b 27%, #b22845 32%, #380713 36%);
+  box-shadow: inset -12px 0 25px #16000699, 0 0 35px #000a;
+  transition: transform 2.15s cubic-bezier(0.76, 0, 0.18, 1);
+  will-change: transform;
+}
+.estrade-opening__curtain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.75;
+  background: repeating-linear-gradient(90deg, #ffb8a00a 0 3%, #1103076e 4% 8%, transparent 12% 16%);
+  pointer-events: none;
+}
+.estrade-opening__curtain--left { left: 0; border-right: 8px solid #33050f; }
+.estrade-opening__curtain--right { right: 0; transform: scaleX(-1); border-left: 8px solid #33050f; }
+.estrade-opening--opening .estrade-opening__curtain--left { transform: translateX(-105%); }
+.estrade-opening--opening .estrade-opening__curtain--right { transform: translateX(105%) scaleX(-1); }
+.estrade-opening__pelmet {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: clamp(45px, 8vw, 125px);
+  background: repeating-linear-gradient(93deg, #420817, #ac1e3b 8%, #530a1d 15%, #26050d 19%);
+  box-shadow: 0 17px 24px #0006, inset 0 -10px 12px #17010882;
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 95% 80%, 90% 74%, 85% 82%, 80% 73%, 75% 84%, 70% 72%, 65% 84%, 60% 74%, 55% 84%, 50% 74%, 45% 84%, 40% 74%, 35% 84%, 30% 72%, 25% 84%, 20% 73%, 15% 82%, 10% 74%, 5% 80%, 0 70%);
+  transition: transform 2.1s cubic-bezier(0.76, 0, 0.18, 1);
+  pointer-events: none;
+}
+.estrade-opening--opening .estrade-opening__pelmet { transform: translateY(-115%); }
+.estrade-opening--opening .estrade-opening__stage-name,
+.estrade-opening--opening .estrade-opening__tagline { opacity: 1; transform: none; filter: none; }
+.estrade-opening--opening .estrade-opening__halo { opacity: 1; }
+.estrade-opening__caption {
+  position: absolute;
+  z-index: 6;
+  left: 50%;
+  bottom: 9vh;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  color: #f5d4b1;
+  transition: opacity 0.45s ease;
+}
+.estrade-opening--opening .estrade-opening__caption { opacity: 0; }
+.estrade-opening__skip {
+  position: absolute;
+  z-index: 7;
+  top: 24px;
+  right: clamp(18px, 4vw, 70px);
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid #ecd2ae78;
+  background: #220b13a8;
+  color: #fff4e3;
+  cursor: pointer;
+  font: 15px Georgia, serif;
+}
+.estrade-opening__skip:hover { background: #5d1726; }
+.estrade-opening__skip:focus-visible,
+.estrade-opening__replay:focus-visible { outline: 3px solid #d9b374; outline-offset: 3px; }
+.estrade-opening__replay {
+  position: fixed;
+  z-index: 45;
+  right: 20px;
+  bottom: 20px;
+  padding: 11px 15px;
+  border-radius: 2px;
+  border: 1px solid var(--rule, #9995);
+  color: var(--ink, #eee);
+  background: var(--surface, #2b2024);
+  font: 14px Georgia, serif;
+  box-shadow: 0 8px 25px #0002;
+  cursor: pointer;
+}
+.estrade-opening__replay:hover { transform: translateY(-2px); }
+/* Post-opening stage replaces lamp while preserving the surrounding hero layout. */
+.hero-stage.estrade-theatre-showcase {
+  position: relative;
+  min-height: 460px;
+  height: min(60vh, 610px);
+  overflow: hidden;
+  isolation: isolate;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  background: radial-gradient(ellipse at 50% 44%, #793a42 0%, #381d29 40%, #160c12 100%);
+  border-radius: 2px;
+  color: #fff1dc;
+}
+.estrade-theatre-showcase__arch {
+  position: absolute;
+  inset: 4% 4% -5%;
+  border: clamp(10px, 2vw, 24px) solid #6b2e31;
+  border-bottom: 0;
+  border-radius: 48% 48% 0 0 / 25% 25% 0 0;
+  box-shadow: inset 0 0 30px #180509, 0 0 0 3px #b98e5b5b;
+}
+.estrade-theatre-showcase__beam {
+  position: absolute;
+  top: -20%;
+  left: 14%;
+  width: 72%;
+  height: 112%;
+  clip-path: polygon(45% 0, 55% 0, 100% 100%, 0 100%);
+  background: linear-gradient(180deg, #fff7c327, #f3c88013 70%, transparent);
+  filter: blur(14px);
+}
+.estrade-theatre-showcase__glow {
+  position: absolute;
+  width: 80%;
+  height: 65%;
+  background: radial-gradient(ellipse, #f0cb8f34, transparent 69%);
+  filter: blur(20px);
+}
+.estrade-theatre-showcase__content { position: relative; z-index: 2; text-align: center; padding: 2rem; }
+.estrade-theatre-showcase__overline { display:block; font-size: 12px; letter-spacing: .24em; color: #e8cba4; }
+.estrade-theatre-showcase__name { font-size: clamp(72px, 8.5vw, 154px); letter-spacing: -.065em; line-height: 1; font-weight: 400; margin-top: 22px; }
+.estrade-theatre-showcase__name span { color: #e0ae75; }
+.estrade-theatre-showcase__content p { font-size: clamp(16px, 1.4vw, 23px); color: #f5dbb6; font-style: italic; margin: 12px 0 0; }
+.estrade-theatre-showcase__floor { position:absolute; inset:auto -15% -15%; height:25%; border-top:1px solid #d4ad786a; background:linear-gradient(#865d4127,#0f080e); transform: perspective(500px) rotateX(35deg); }
+.estrade-theatre-showcase__footer { position: absolute; z-index: 2; bottom: 22px; font-size: 12px; letter-spacing: .17em; color:#f1cfaa; }
+@media (max-width: 760px) {
+  .hero-stage.estrade-theatre-showcase { min-height: 340px; height: 390px; }
+  .estrade-theatre-showcase__name { font-size: clamp(64px, 17vw, 110px); }
+  .estrade-opening__caption { font-size: 10px; letter-spacing: .15em; }
+  .estrade-opening__replay { right: 10px; bottom: 10px; font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .estrade-opening__curtain, .estrade-opening__pelmet, .estrade-opening__stage-name,
+  .estrade-opening__tagline, .estrade-opening__halo { transition-duration: 0.01ms !important; }
+}

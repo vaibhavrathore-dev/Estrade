@@ -6,15 +6,14 @@ import {
   ArrowUpRight,
   Menu,
   X,
-  Sun,
-  Moon,
   Check,
   ShieldCheck,
   QrCode,
 } from "lucide-react";
-import { useTheme } from "../components/Theme";
 import TeamSection from "../components/TeamSection";
-import LampExperience from "../components/LampExperience";
+import CurtainOpening from "../components/CurtainOpening";
+import StageShowcase from "../components/StageShowcase";
+import TheatreStory from "../components/TheatreStory";
 const steps = [
   [
     "Discover",
@@ -24,7 +23,7 @@ const steps = [
   [
     "Register",
     "A place for every participant.",
-    "Discover event details and capacity. Participant self-registration and dynamic forms are planned; contact your organizer to take part.",
+    "Explore event details, register with event-specific fields, and receive a signed QR ticket for check-in.",
   ],
   [
     "Organize",
@@ -39,7 +38,7 @@ const steps = [
   [
     "Execute",
     "Be present for the moment.",
-    "Keep your people and event details close at hand. Signed QR check-in is part of the planned attendance experience.",
+    "Use signed QR tickets and organizer check-in to record attendance and prevent duplicate scans.",
   ],
   [
     "Verify",
@@ -49,11 +48,10 @@ const steps = [
   [
     "Preserve",
     "Let the moment live on.",
-    "Analyze image sharpness and duplicates with OpenCV and perceptual hashes. Persistent storage and Google Drive preservation are planned.",
+    "Filter blurry, dark, and duplicate event photos, sanitize metadata, and preserve accepted media in organized Google Drive folders.",
   ],
 ];
 export default function Home() {
-  const { lit, toggle } = useTheme();
   const [menu, setMenu] = useState(false);
   const [step, setStep] = useState(0);
   const [media, setMedia] = useState("Accepted");
@@ -74,6 +72,7 @@ export default function Home() {
   }, []);
   return (
     <div className="cinema-home">
+      <CurtainOpening />
       <a className="skip-link" href="#main">
         Skip to content
       </a>
@@ -108,7 +107,7 @@ export default function Home() {
             </a>
           ))}
           <Link to="/login">Login</Link>
-          <Link className="button primary" to="/signup">
+          <Link className="button primary" to="/login">
             Get Started <ArrowUpRight size={17} />
           </Link>
         </nav>
@@ -130,7 +129,7 @@ export default function Home() {
               memories.
             </p>
             <div className="hero-actions">
-              <Link className="button primary" to="/signup">
+              <Link className="button primary" to="/login">
                 Set the stage <ArrowUpRight size={18} />
               </Link>
               <a className="text-link" href="#lifecycle">
@@ -142,36 +141,7 @@ export default function Home() {
               <span>who make it all happen.</span>
             </div>
           </div>
-          <div className="hero-stage">
-            <div className="stage-index">OBJECT 01 / THE ESTRADE LIGHT</div>
-            <div className="stage-beam" />
-            <div className="stage-pool" />
-            <button
-              className="lamp-control"
-              onClick={toggle}
-              aria-label={lit ? "Turn lamp off" : "Turn lamp on"}
-              aria-pressed={lit}
-            >
-              <LampExperience lit={lit} />
-            </button>
-            <button
-              className="hero-wordmark"
-              onClick={toggle}
-              aria-label="Illuminate Estrade"
-              aria-pressed={lit}
-            >
-              estrade<span>.</span>
-            </button>
-            <div className="stage-caption">
-              <span>
-                {lit ? <Sun size={15} /> : <Moon size={15} />}{" "}
-                {lit
-                  ? "A little light. Endless possibilities."
-                  : "Click to illuminate."}
-              </span>
-              <span>DESIGNED TO BRING IT TOGETHER</span>
-            </div>
-          </div>
+          <StageShowcase />
           <div className="hero-ledger">
             <span className="ledger-label">
               A CONNECTED EXPERIENCE
@@ -195,6 +165,7 @@ export default function Home() {
             THERE’S MORE BEHIND THE MOMENT <ArrowDown size={16} />
           </a>
         </section>
+        <TheatreStory />
         <section
           className="editorial-section challenge"
           id="challenge"
@@ -580,7 +551,7 @@ export default function Home() {
             <br />
             <em>a better stage.</em>
           </h2>
-          <Link className="button primary" to="/signup">
+          <Link className="button primary" to="/login">
             Start with Estrade <ArrowUpRight size={18} />
           </Link>
           <span className="closing-wordmark" aria-hidden="true">

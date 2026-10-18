@@ -456,3 +456,45 @@ def test_health_and_database_readiness(context):
         "status": "ready",
         "database": "ok",
     }
+
+def test_admin_management(context):
+    from app.models import Assignment
+    from uuid import UUID
+    client, db, admin, student, outsider, c, v, other = context
+    url = '/api/v1/venues'
+    venue_name = f'New Auditorium {uuid4()}'
+    body = {'name': venue_name, 'capacity': 180}
+    assert client.post(url, json=body, headers=headers(student)).status_code == 403
+    assert client.post(url, json={'name': '  ', 'capacity': 10}, headers=headers(admin)).status_code == 422
+    assert client.post(url, json={'name': venue_name, 'capacity': 0}, headers=headers(admin)).status_code == 422
+    created = client.post(url, json=body, headers=headers(admin))
+    assert created.status_code == 201, created.text
+    assert created.json()['name'] == venue_name
+    assert client.post(url, json={'name': venue_name.lower(), 'capacity': 80}, headers=headers(admin)).status_code == 409
+    assert any(row['id'] == created.json()['id'] for row in client.get(url, headers=headers(admin)).json())
+
+    member_url = f'/api/v1/committees/{c.id}/members/{student.id}'
+    assert client.delete(member_url, headers=headers(outsider)).status_code == 403
+    event = create(client, admin, c, v)
+    assign = client.post(f"/api/v1/events/{event['id']}/assignments",
+                         json={'user_id': str(student.id), 'duty': 'Venue desk'}, headers=headers(admin))
+    assert assign.status_code == 201
+    assert client.delete(member_url, headers=headers(admin)).status_code == 409
+    saved_assignment = db.get(Assignment, UUID(assign.json()['id']))
+    saved_assignment.status = 'withdrawn'
+    db.commit()
+    assert client.delete(member_url, headers=headers(admin)).status_code == 200
+    assert db.get(Assignment, saved_assignment.id) is not None  # preserve history
+    assert client.delete(member_url, headers=headers(admin)).status_code == 404
+
+    committee_url = f'/api/v1/committees/{c.id}'
+    assert client.delete(committee_url, headers=headers(student)).status_code == 403
+    assert client.delete(committee_url, headers=headers(admin)).status_code == 200
+    assert db.get(Committee, c.id).is_active is False
+    assert db.get(Event, UUID(event['id'])) is not None  # no historical deletion
+    assert client.post('/api/v1/events', json=payload(c, other), headers=headers(admin)).status_code == 422
+    assert not any(x['id'] == str(c.id) for x in client.get('/api/v1/committees', headers=headers(student)).json())
+    assert client.post(committee_url + '/restore', headers=headers(student)).status_code == 403
+    assert client.post(committee_url + '/restore', headers=headers(admin)).status_code == 200
+    assert db.get(Committee, c.id).is_active is True
+    assert client.post('/api/v1/events', json=payload(c, other), headers=headers(admin)).status_code == 201

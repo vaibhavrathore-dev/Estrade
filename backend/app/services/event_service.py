@@ -40,10 +40,15 @@ def create_event(
         )
 
     # 2. Verify committee exists
-    committee = db.get(Committee, data.committee_id)
+    committee = db.scalar(
+        select(Committee).where(Committee.id == data.committee_id).with_for_update()
+    )
 
     if committee is None:
         raise EventResourceError("Committee not found")
+
+    if not committee.is_active:
+        raise EventResourceError("This committee has been archived")
 
     # 3. Verify committee permissions
     if actor.user_type != "admin":

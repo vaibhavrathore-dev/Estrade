@@ -12,6 +12,7 @@ import UpcomingEvents from "../components/UpcomingEvents";
 import EventReadiness from "../components/EventReadiness";
 import EventForm from "../components/EventForm";
 import EventWorkspace from "../components/EventWorkspace";
+import AdminManagement from "../components/AdminManagement";
 import DashboardPreviewWorkspace from "../components/DashboardPreviewWorkspace";
 import { dashboardPreviewData } from "../components/dashboardPreviewData";
 import { apiRequest, authAPI, eventAPI } from "../services/api";
@@ -350,11 +351,14 @@ export default function Dashboard({ initialCreateEvent = false, previewMode = fa
                       <article className="estrade-committee-card" key={committee.id}>
                         <span className="estrade-committee-monogram" aria-hidden="true">{committee.name?.charAt(0) || "C"}</span>
                         <div><h3>{committee.name}</h3><p>{committee.role ? `${committee.role} · ${committee.membership_status || "membership"}` : "Committee"}</p></div>
-                        <span className={`estrade-pill ${committee.can_manage ? "can-manage" : ""}`}>{committee.can_manage ? "Can manage" : "View only"}</span>
+                        <span className={`estrade-pill ${committee.can_manage ? "can-manage" : ""}`}>{committee.is_active === false ? "Archived" : committee.can_manage ? "Can manage" : "View only"}</span>
                       </article>
                     ))}</div>
                   )}
                 </section>
+              )}
+              {activePage === "Committees" && !previewMode && data.user.user_type === "admin" && (
+                <AdminManagement venues={data.venues} committees={data.committees} onChanged={refresh} />
               )}
               {activePage === "Certificates" && (
                 <section className="operations-panel">

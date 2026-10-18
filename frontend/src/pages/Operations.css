@@ -60,3 +60,8 @@
   .estrade-dashboard .mobile-workspace-select select { max-width:100%; min-width:0; padding:8px; background:#fff9f2; color:#570713; border-radius:6px; }
 }
 .estrade-dashboard .dashboard-content .operations-panel input[type="checkbox"] { width:auto; justify-self:start; }
+
+.estrade-admin-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+.estrade-admin-management .operations-row { overflow-wrap: anywhere; }
+.estrade-admin-roster { margin-top: 22px; padding-top: 12px; border-top: 1px solid #e7e7df; }
+@media (max-width: 720px) { .estrade-admin-grid { grid-template-columns: 1fr; } }

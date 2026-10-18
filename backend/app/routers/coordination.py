@@ -51,7 +51,7 @@ def assign(event_id: UUID, data: AssignmentCreate, db: Session = Depends(get_db)
     if event.status == 'cancelled':
         raise HTTPException(422, 'Cannot staff a cancelled event')
     member = db.scalar(select(CommitteeMember).where(CommitteeMember.committee_id == event.committee_id,
-        CommitteeMember.user_id == data.user_id, CommitteeMember.verification_status == 'approved'))
+        CommitteeMember.user_id == data.user_id, CommitteeMember.verification_status == 'approved').with_for_update())
     target = db.get(User, data.user_id)
     if not member or not target or not target.is_active:
         raise HTTPException(422, 'Choose an active approved committee member')

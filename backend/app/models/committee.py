@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import String, Text, DateTime, Uuid, func
+from sqlalchemy import String, Text, DateTime, Uuid, Boolean, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -25,6 +25,10 @@ class Committee(Base):
     description: Mapped[str | None] = mapped_column(
         Text,
         nullable=True,
+    )
+
+    is_active: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default="true"
     )
 
     created_at: Mapped[datetime] = mapped_column(

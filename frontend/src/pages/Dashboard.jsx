@@ -1,4 +1,5 @@
 import Button from "../components/Button";
+import AdminWorkspace from "../components/AdminWorkspace";
 import CommitteeWorkspace, { MyAssignments } from "../components/CommitteeWorkspace";
 import { MyRegistrations } from "../components/RegistrationWorkspace";
 import { useCallback, useEffect, useState } from "react";
@@ -340,7 +341,7 @@ export default function Dashboard({ initialCreateEvent = false, previewMode = fa
               )}
               {activePage === "My Registrations" && !previewMode && <MyRegistrations/>}
               {activePage === "My Assignments" && !previewMode && <MyAssignments/>}
-              {activePage === "Committees" && !previewMode && <CommitteeWorkspace committees={data.committees} user={data.user} onChanged={refresh}/>}
+              {activePage === "Committees" && !previewMode && <>{data.user.user_type === "admin" && <AdminWorkspace committees={data.committees} onChanged={refresh}/>}<CommitteeWorkspace committees={data.committees} user={data.user} onChanged={refresh}/></>}
               {activePage === "Committees" && previewMode && (
                 <section className="estrade-committee-section">
                   <div className="section-title-row"><div><span className="eyebrow">CAMPUS ORGANIZATION</span><h2>Committee directory</h2></div></div>

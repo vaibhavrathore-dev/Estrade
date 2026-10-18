@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import ThemeToggle from '../components/ThemeToggle';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { apiRequest } from '../services/api';
 import './Login.css';
@@ -24,7 +25,7 @@ export default function AccountRecovery({ verification = false }) {
       }
     } catch(e) {setMessage(e.message);} finally {setBusy(false);}
   }
-  return <div className="estrade-login"><div className="login-form-panel"><div className="login-form-wrapper"><Link className="login-brand-logo" to="/">estrade.</Link><h1>{verification ? 'Verify your email' : 'Recover your account'}</h1><p>{step === 'email' ? 'Step 1 of 3 · Request a code' : step === 'code' ? 'Enter the six-digit email code. It expires after 10 minutes.' : 'Step 3 of 3 · Choose a new password'}</p>
+  return <div className="estrade-login"><div className="login-form-panel"><div className="login-form-wrapper"><div className="auth-toolbar"><Link className="login-brand-logo" to="/">estrade.</Link><ThemeToggle /></div><h1>{verification ? 'Verify your email' : 'Recover your account'}</h1><p>{step === 'email' ? 'Step 1 of 3 · Request a code' : step === 'code' ? 'Enter the six-digit email code. It expires after 10 minutes.' : 'Step 3 of 3 · Choose a new password'}</p>
     <form className="login-form" onSubmit={submit}><label>Email address<input type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" disabled={step === 'password'}/></label>
       {step === 'code' && <label>Six-digit code<input inputMode="numeric" pattern="[0-9]{6}" maxLength={6} value={code} onChange={e => setCode(e.target.value)} required autoComplete="one-time-code"/></label>}
       {step === 'password' && <><label>New password (at least 12 characters)<input type={show ? 'text' : 'password'} minLength={12} maxLength={128} value={password} onChange={e => setPassword(e.target.value)} required autoComplete="new-password"/></label><label>Confirm password<input type={show ? 'text' : 'password'} value={confirmation} onChange={e => setConfirmation(e.target.value)} required autoComplete="new-password"/></label><button type="button" onClick={() => setShow(!show)}>{show ? 'Hide passwords' : 'Show passwords'}</button></>}

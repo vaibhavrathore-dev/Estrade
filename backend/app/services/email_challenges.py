@@ -1,6 +1,7 @@
 """Bounded, one-use email challenges. No codes or credentials are logged."""
 from datetime import datetime, timedelta, timezone
 import hashlib
+import logging
 import hmac
 import secrets
 from email.message import EmailMessage
@@ -11,6 +12,8 @@ from googleapiclient.discovery import build
 from app.core.config import settings
 from app.models import EmailChallenge, User
 from app.services.google_auth import google_credentials
+
+logger = logging.getLogger("estrade.email")
 
 
 def digest(value):
@@ -63,12 +66,18 @@ def request_code(db, email, purpose):
     db.commit()
     try:
         email_ready()
-    except Exception:
+    except Exception as exc:
+        # Never log addresses, codes, token contents, or provider error bodies.
+        logger.error('email_transport_unavailable cause=%s', type(exc).__name__)
         raise HTTPException(503, 'Email delivery is unavailable. Please retry later or contact the administrator.')
     if eligible:
         try:
             send_code(email, code, purpose)
-        except Exception:
+        except Exception as exc:
+            # Password recovery remains non-enumerating; operators still get a safe signal.
+            provider_status = getattr(getattr(exc, 'resp', None), 'status', None)
+            logger.error('email_delivery_failed purpose=%s cause=%s status=%s',
+                         purpose, type(exc).__name__, provider_status)
             if purpose != 'recover':
                 raise HTTPException(503, 'Email delivery is unavailable. Please retry later or contact the administrator.')
             # Recovery response must not disclose whether a recipient exists,

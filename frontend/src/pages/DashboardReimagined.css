@@ -332,3 +332,62 @@
     animation: none !important;
   }
 }
+
+/* ESTRADE OCTOBER RELIABILITY PATCH — the dashboard skin is last in CSS load order. */
+:root[data-light="off"] .estrade-dashboard {
+  --canvas:#18151a; --surface:#272127; --ink:#f8f1ed;
+  --subtle:#d4bdc4; --rule:#5b424b; --accent:#f4b9ca;
+  --ed-canvas:#18151a; --ed-surface:#272127; --ed-line:#5b424b;
+  --ed-muted:#d4bdc4; --cream:#18151a; --line:#5b424b;
+  background:#18151a; color:#f8f1ed;
+}
+:root[data-light="off"] .estrade-dashboard .dashboard-main,
+:root[data-light="off"] .estrade-dashboard .dashboard-topbar { background:#18151a; color:#f8f1ed; border-color:#5b424b; }
+:root[data-light="off"] .estrade-dashboard .dashboard-topbar .dashboard-search,
+:root[data-light="off"] .estrade-dashboard .dashboard-topbar .faculty-avatar { background:#352931; border-color:#664a57; color:#f5cad5; }
+:root[data-light="off"] .estrade-dashboard .dashboard-topbar .dashboard-search input,
+:root[data-light="off"] .estrade-dashboard .dashboard-topbar .faculty-name,
+:root[data-light="off"] .estrade-dashboard .dashboard-topbar .notification-button { color:#f8f1ed; }
+:root[data-light="off"] .estrade-dashboard .dashboard-content .dashboard-stats .stat-item,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .upcoming-events,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .event-readiness,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .operations-panel,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .estrade-committee-section,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .estrade-committee-card {
+  background:#272127; border-color:#5b424b; color:#f8f1ed;
+}
+:root[data-light="off"] .estrade-dashboard .dashboard-content .command-heading h1,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .event-information h4,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .event-readiness h4,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .operations-panel h3,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .section-title-row h2,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .event-readiness h2,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .operations-panel h2,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .estrade-committee-section h2 { color:#f0bacb; }
+:root[data-light="off"] .estrade-dashboard .dashboard-content p,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .command-heading p,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .dashboard-stats .stat-item p,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .event-information p,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .estrade-stat-label { color:#d6bec7; }
+:root[data-light="off"] .estrade-dashboard .dashboard-content .dashboard-stats .stat-item h2,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .event-details,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .view-all-events { color:#efb2c5; }
+:root[data-light="off"] .estrade-dashboard .estrade-overview-intro { background:linear-gradient(120deg,#34232d,#231c23); border-color:#654452; }
+:root[data-light="off"] .estrade-dashboard .estrade-overview-intro h2 { color:#f5d9e1; }
+:root[data-light="off"] .estrade-dashboard .dashboard-content .event-date-box { background:#38272f; color:#f7c6d3; border-color:#674b57; }
+:root[data-light="off"] .estrade-dashboard .dashboard-content .event-row,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .operations-row { border-color:#503b46; }
+:root[data-light="off"] .estrade-dashboard .dashboard-content .operations-form input,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .operations-form select,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .operations-form textarea,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .operations-select { background:#342a32; color:#fff5f1; border-color:#755b65; }
+:root[data-light="off"] .estrade-dashboard .dashboard-content .operations-form label { color:#f1e3e6; }
+:root[data-light="off"] .estrade-dashboard .operations-dialog { background:#272127; color:#f8f1ed; }
+:root[data-light="off"] .estrade-dashboard .operations-dialog .operations-dialog-header { background:#272127; }
+:root[data-light="off"] .estrade-dashboard .dashboard-content .operations-message { background:#362831; color:#f7d3dc; }
+:root[data-light="off"] .estrade-dashboard .dashboard-content .estrade-refresh-button,
+:root[data-light="off"] .estrade-dashboard .dashboard-content .estrade-quick-actions button:not(.is-primary) { background:#372a32; color:#f3cad7; border-color:#70515d; }
+:root[data-light="off"] .estrade-dashboard .dashboard-content .withdrawal-alert { background:#483126; color:#ffe2bf; }
+:root[data-light="off"] .estrade-dashboard .theme-toggle { color:#f5d5de; border-color:#664754; }
+:root[data-light="off"] .estrade-dashboard .dashboard-sidebar { background:#42101f; }
+/* Keep semantic approval/danger buttons distinctive, not recolored as ordinary surfaces. */

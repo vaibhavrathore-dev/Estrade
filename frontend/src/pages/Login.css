@@ -1359,3 +1359,26 @@
   }
 }.login-form > label { display:grid; gap:8px; margin-bottom:16px; }
 .login-form > label > input { padding:12px; border:1px solid #b7a9a1; border-radius:6px; font:inherit; }
+
+/* ESTRADE OCTOBER RELIABILITY PATCH — authenticated and recovery dark theme. */
+:root[data-light="off"] .estrade-login { background:#18151a; color:#f5e9e5; }
+:root[data-light="off"] .estrade-login .login-form-panel { background:#18151a; }
+:root[data-light="off"] .estrade-login .login-heading h2,
+:root[data-light="off"] .estrade-login .login-small-label,
+:root[data-light="off"] .estrade-login .login-password-header a,
+:root[data-light="off"] .estrade-login .login-signup a { color:#f0b9c9; }
+:root[data-light="off"] .estrade-login .login-heading > p,
+:root[data-light="off"] .estrade-login .login-signup p,
+:root[data-light="off"] .estrade-login .login-form-footer,
+:root[data-light="off"] .estrade-login .login-back-link,
+:root[data-light="off"] .estrade-login .login-field label,
+:root[data-light="off"] .estrade-login .login-form-wrapper > p,
+:root[data-light="off"] .estrade-login .login-form-wrapper > h1,
+:root[data-light="off"] .estrade-login .login-form-wrapper form > label { color:#e9d9dc; }
+:root[data-light="off"] .estrade-login .login-input-wrapper,
+:root[data-light="off"] .estrade-login .login-form-wrapper form > label > input { background:#292329; border:1px solid #59404a; color:#fff5f1; border-radius:6px; }
+:root[data-light="off"] .estrade-login input { color:#fff5f1; }
+:root[data-light="off"] .estrade-login input::placeholder { color:#b9a3ae; }
+:root[data-light="off"] .estrade-login .login-signup { border-top-color:#59404a; }
+:root[data-light="off"] .estrade-login .login-message { background:#34252d; color:#f8ced9; border-left-color:#c97b94; }
+:root[data-light="off"] .estrade-login .theme-toggle { color:#f5d5de; border-color:#664754; }

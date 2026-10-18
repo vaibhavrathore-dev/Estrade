@@ -161,3 +161,26 @@ def test_self_review_and_cancelled_checkin(context):
     assert client.get(root+'/attendance', headers=headers(student)).status_code == 403
     client.post(root+'/cancel', headers=headers(admin))
     assert client.post('/api/v1/check-in', json={'token':token}, headers=headers(admin)).status_code == 422
+
+# ESTRADE OCTOBER RELIABILITY PATCH — admin capabilities and authorization.
+def test_admin_committee_provisioning(context):
+    client, db, admin, student, outsider, c, v, other = context
+    url = '/api/v1/admin/committees'
+    name = f'Admin-created {uuid4()}'
+    body = {'name': name, 'description':'Test committee', 'head_user_id':str(outsider.id)}
+    assert client.get('/api/v1/admin/users', headers=headers(student)).status_code == 403
+    assert client.post(url, json=body, headers=headers(student)).status_code == 403
+    response = client.post(url, json=body, headers=headers(admin))
+    assert response.status_code == 201, response.text
+    committee_id = response.json()['id']
+    assert client.post(url, json=body, headers=headers(admin)).status_code == 409
+    assert client.get('/api/v1/committees', headers=headers(outsider)).status_code == 200
+    committee_row = next(c for c in client.get('/api/v1/committees', headers=headers(outsider)).json() if c['id'] == committee_id)
+    assert committee_row['role'] == 'head' and committee_row['can_manage']
+    assert client.post(f'/api/v1/admin/users/{student.id}/faculty', headers=headers(outsider)).status_code == 403
+    assert client.post(f'/api/v1/admin/users/{student.id}/faculty', headers=headers(admin)).status_code == 200
+    ep = f'/api/v1/admin/committees/{committee_id}/executives'
+    assert client.post(ep, json={'user_id':str(student.id)}, headers=headers(outsider)).status_code == 403
+    assert client.post(ep, json={'user_id':str(student.id)}, headers=headers(admin)).status_code == 201
+    assert client.post(ep, json={'user_id':str(student.id)}, headers=headers(admin)).status_code == 409
+    assert next(c for c in client.get('/api/v1/committees', headers=headers(student)).json() if c['id'] == committee_id)['can_manage']

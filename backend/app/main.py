@@ -16,7 +16,7 @@ from app.core.upload_limits import UploadBodyLimit
 app.add_middleware(UploadBodyLimit)
 
 app.add_middleware(CORSMiddleware, allow_origins=settings.CORS_ORIGINS,
-                   allow_credentials=False, allow_methods=["GET", "POST", "PATCH", "OPTIONS"],
+                   allow_credentials=False, allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
                    allow_headers=["Authorization", "Content-Type"])
 
 app.include_router(auth_router)
